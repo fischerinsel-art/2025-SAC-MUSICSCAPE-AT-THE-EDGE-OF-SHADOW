@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fischerinsel-art.github.io/2025-INCHEON-IN-CHOI-GUITAR-RECITAL/sitemap.xml
