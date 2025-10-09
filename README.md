@@ -1,8 +1,8 @@
-# IN CHOI GUITAR RECITAL — FROM HERE TO EVERYWHERE 🎸
+# Musicscape - 그림자의 경계에서 🎸
 
 **FISCHERINSEL ARTS**의 공식 공연 홍보 웹사이트입니다.  
-2025년 10월 인천 중구문화회관에서 열리는  
-**최인 기타 리사이틀 "From Here to Everywhere"**를 위한 안내 페이지입니다.
+2025년 11월 예술의전당 자유소극장에서 열리는  
+**Musicscape 그림자의 경계에서**를 위한 안내 페이지입니다.
 
 ---
 
