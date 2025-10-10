@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-J53N2WFMLN"></script>
+<script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   gtag('config', 'G-J53N2WFMLN');
+ </script>
+<script>
+  // 예매 클릭 이벤트 전송 도우미
+  function sendTicketClick(sectionId, linkUrl){
+    if (typeof gtag === 'function') {
+      gtag('event', 'ticket_click', {
+        event_category: 'engagement',
+        event_label: sectionId || '(unknown)',
+        link_url: linkUrl || '',
+        page_location: location.href
+      });
+    }
+  }
+ </script>
+<script>
+  // 도메인 → 플랫폼 이름 매핑 (필요시 추가/수정)
+  const SOCIAL_MAP = [
+    { test: /instagram\.com/i, platform: 'instagram' },
+    { test: /youtube\.com|youtu\.be/i, platform: 'youtube' },
+    { test: /inchoi\.kr/i, platform: 'artist_site' },
+    { test: /fischerinsel/i, platform: 'agency_site' },
+    // { test: /x\.com|twitter\.com/i, platform: 'x' }, // 나중에 추가 가능
+  ];
+
+  function inferPlatform(url){
+    try{
+      const u = new URL(url, location.href);
+      const host = u.hostname;
+      for (const m of SOCIAL_MAP){
+        if (m.test.test(host)) return m.platform;
+      }
+      return 'website';
+    }catch(e){
+      return 'website';
+    }
+  }
+
+  function extractHandle(url){
+    try{
+      const u = new URL(url, location.href);
+      // instagram: /{handle}  | youtube 채널: /@handle
+      const path = u.pathname.replace(/\/+$/, '');
+      const at = path.match(/\/@([^\/?#]+)/);
+      if (at) return '@' + at[1];
+      const segs = path.split('/').filter(Boolean);
+      if (segs.length) return segs[segs.length - 1];
+    }catch(e){}
+    return '';
+  }
+
+  // 공통 이벤트 송신
+  function sendSocialClick(params){
+    if (typeof gtag === 'function') {
+      gtag('event', 'social_click', {
+        event_category: 'engagement',
+        platform: params.platform || 'website',    // instagram / youtube / artist_site / agency_site ...
+        handle: params.handle || '',              // @inchoiguitar, @inchoi2014 등
+        person: params.person || '',              // 최인/유현수/박재린/피셔인젤 등
+        section: params.section || '',            // artists / footer 등
+        link_url: params.link || '',
+        page_location: location.href
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    // 추적 대상: 페이지의 모든 a[href] 중 외부/소셜 링크
+    const links = Array.from(document.querySelectorAll('a[href]'));
+
+    links.forEach(a => {
+      const href = a.getAttribute('href');
+      if (!href) return;
+
+      const platform = inferPlatform(href);
+      if (!platform || (platform === 'website' && !/inchoi\.kr|fischerinsel/i.test(href))) {
+        // 일반 내부 링크는 무시 (필요시 조건 조정)
+        return;
+      }
+
+      // 섹션/사람 추정
+      const section = a.closest('section')?.id || 'nav_or_footer';
+      // 아티스트 카드 내부면 이름 가져오기
+      let person = '';
+      const artistCard = a.closest('.artist-card');
+      if (artistCard) {
+        const nameEl = artistCard.querySelector('h3');
+        if (nameEl) person = nameEl.textContent.split(/\s/)[0].trim(); // "최인" 등
+      }
+      if (!person && /fischerinsel/i.test(href)) person = 'Fischerinsel';
+
+      const handle = extractHandle(href);
+
+      a.addEventListener('click', () => {
+        sendSocialClick({
+          platform,
+          handle,
+          person,
+          section,
+          link: href
+        });
+      }, {passive:true});
+    });
+  });
+</script>
+<script>
+  // DOM 준비되면 인터파크 예매 링크에 이벤트 바인딩
+  document.addEventListener('DOMContentLoaded', function(){
+    const sel = 'a[href*="interpark.com/goods/25013136"]';
+    document.querySelectorAll(sel).forEach(a => {
+      a.addEventListener('click', () => {
+        const section = a.closest('section')?.id || 'nav';
+        sendTicketClick(section, a.href);
+      }, {passive:true});
+    });
+  });
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>MISICSCAPE — AT THE EDGE OF SHADOW </title>
+<!-- SEO -->
+<meta content="2025 예술의 전당 자유소극장 음악회 'MUSICSCAPE - 그림자의 경계에서' 공식 홍보 페이지. 프로그램, 아티스트 소개, 예매 링크, 공연장 안내." name="description">
+<meta content="최인, 기타, 리사이틀, 클래식 공연, 예술의 전당,자유소극장, 음악회, immersive music, recital, 클래식기타, 융복합 공연, 프로젝션 맵핑, 입체음향, immersice concert, 11월 음악회, 기타 독주회, In Choi, 클래식음악회, 피셔인젤 예술기 " name="keywords">
+<meta content="FISCHERINSEL ARTS, 피셔인젤 예술기획" name="author"/>
+<!-- 검색엔진 크롤링 허용 -->
+<meta content="index, follow" name="robots"/>
+<!-- Canonical -->
+<link href="https://fischerinsel-art.github.io/2025-SAC-MUSICSCAPE-AT-THE-EDGE-OF-SHADOW/" rel="canonical"/>
+<!-- Open Graph Meta Tags -->
+<meta content="MISICSCAPE — AT THE EDGE OF SHADOW" property="og:title">
+<meta content="작곡가이자 기타리스트 최인의 음악과 영상, 공간이 교차하는 몰입형 리사이틀" property="og:description"/>
+<meta content="https://fischerinsel-art.github.io/2025-SAC-MUSICSCAPE-AT-THE-EDGE-OF-SHADOW/images/OG.jpg" property="og:image"/>
+<meta content="https://fischerinsel-art.github.io/2025-SAC-MUSICSCAPE-AT-THE-EDGE-OF-SHADOW/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<!-- 트위터 카드용 (선택 사항) -->
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="MISICSCAPE — AT THE EDGE OF SHADOW" name="twitter:title"/>
+<meta content="작곡가이자 기타리스트 최인의 음악과 영상, 공간이 교차하는 몰입형 리사이틀" name="twitter:description"/>
+<meta content="https://fischerinsel-art.github.io/2025-SAC-MUSICSCAPE-AT-THE-EDGE-OF-SHADOW/images/OG.jpg" name="twitter:image"/>
+<meta content="MUSICSCAPE '그림자의 경계에서' 공식 페이지. 프로그램·아티스트·예매·오시는 길 — 2025 예술의전당 자유소극장." name="description"/>
+<meta content="index, follow" name="robots"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicEvent",
+  "name": "MUSICSCAPE - 그림자의 경계에서",
+  "description": "작곡가·기타리스트 최인의 몰입형 리사이틀. 프로그램, 아티스트, 예매, 오시는 길 안내.",
+  "startDate": "2025-10-25T19:30:00+09:00",
+  "endDate": "2025-10-25T21:00:00+09:00",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "image": [
+    "https://fischerinsel-art.github.io/2025-SAC-MUSICSCAPE-AT-THE-EDGE-OF-SHADOW/images/OG.jpg",
+    "https://fischerinsel-art.github.io/2025-SAC-MUSICSCAPE-AT-THE-EDGE-OF-SHADOW/images/poster.jpg"
+  ],
+  "location": {
+    "@type": "Place",
+    "name": "예술의 전당 자유소극장",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "서울특별시 서초구,
+      "streetAddress": "남부순환로 2406",
+      "addressCountry": "KR"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "피셔인젤 예술기획",
+    "sameAs": [
+      "https://instagram.com/fischerinsel"
+    ]
+  },
+  "performer": {
+    "@type": "Person",
+    "name": "최인",
+    "sameAs": [
+      "https://www.inchoi.kr/",
+      "https://instagram.com/inchoiguitar",
+      "https://youtube.com/@inchoi2041"
+    ]
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide",
+    "price": "30000",
+    "priceCurrency": "KRW",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-09-01T00:00:00+09:00"
+  }
+}
+</script>
+<!-- Favicon -->
+<link href="data:image/svg+xml,
+  %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E
+    %3Cdefs%3E%3Cstyle%3E@font-face{font-family:Inter;src:local('Inter');}%3C/style%3E%3C/defs%3E
+    %3Ccircle cx='256' cy='256' r='240' fill='black'/%3E
+    %3Ctext x='50%25' y='54%25' font-size='210' font-family='Inter, Arial, sans-serif' font-weight='800' fill='white' text-anchor='middle'%3EFIA%3C/text%3E
+  %3C/svg%3E" rel="icon" type="image/svg+xml">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    :root{ --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif; --serif:"Libre Baskerville","Times New Roman",Times,serif; }
+    html,body{background:#000;color:#fff;font-family:var(--sans);}
+    .container{max-width:1200px;}
+    .eyebrow{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6);}
+    .muted{color:rgba(255,255,255,.78);} .soft{color:rgba(255,255,255,.58);}
+    .card{border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.02);}
+    .nav{backdrop-filter:blur(10px);background:rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.08);}
+    /* Titles */
+    .title-top{font-weight:900;letter-spacing:.22em}
+    .title-bottom{font-weight:500;letter-spacing:.26em;white-space:nowrap}
+    /* 3D Buttons */
+    .btn3d{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:9999px;
+      padding:10px 16px;font-size:14px;font-weight:700; color:#0b0b0b; background:linear-gradient(#fafafa,#e6e6e6);
+      border:1px solid #d1d1d1; box-shadow:0 6px 18px rgba(0,0,0,.25), inset 0 1px 0 #fff;}
+    .btn3d:active{transform:translateY(1px); box-shadow:0 4px 10px rgba(0,0,0,.25), inset 0 1px 0 #fff;}
+    .btn3d.circle{width:44px;height:44px;padding:0;border-radius:9999px;}
+    @media (max-width:480px){ .btn3d.circle{width:38px;height:38px} .btn3d{padding:8px 14px;font-size:13px} }
+    .bars{width:18px;height:12px;position:relative}
+    .bars::before,.bars::after,.bars span{content:"";position:absolute;left:0;right:0;height:2px;background:#000;border-radius:1px}
+    .bars::before{top:0}.bars::after{bottom:0}.ars span{top:50%;transform:translateY(-50%)}
+    /* Slide menu */
+    .menu-panel{position:fixed;top:0;left:0;height:100vh;width:min(82vw,360px);background:rgba(15,15,15,.96);border-right:1px solid rgba(255,255,255,.08);transform:translateX(-100%);transition:transform .28s ease;z-index:60;backdrop-filter:blur(6px);}
+    .menu-panel.open{transform:translateX(0)}
+    .menu-link{display:block;padding:14px 18px;font-weight:500;color:#fff;}
+    .menu-link:hover{background:rgba(255,255,255,.06);}
+    /* Statement */
+    @media (min-width:767px){.statement-h1{font-size:44px;letter-spacing:.02em}.statement-sub{font-size:18px}} @media (max-width:767px){.statement-h1{font-size:26px;letter-spacing:.02em}.statement-sub{font-size:15px}}
+    .statement-h1{font-weight:700}
+    /* Program cards */
+    .prog-card .overlay{position:absolute;inset:0;background:rgba(0,0,0,.78);color:#fff;padding:16px;opacity:0;transition:opacity .2s ease;overflow:auto;}
+    .prog-card:hover .overlay,.prog-card:focus-within .overlay{opacity:1;}
+    .prog-card .title{padding:12px 4px 10px;font-weight:600;text-align:center;}
+    .tap-hint{position:absolute;right:10px;bottom:10px;font-size:12px;color:rgba(255,255,255,.8);}
+    /* Artists */
+    .artist-card{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;}
+    @media(min-width:900px){.artist-card{grid-template-columns:360px 1fr}}
+    .artist-photo{aspect-ratio:3/4;object-fit:cover;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:#111;}
+    /* Team */
+    .team-grid{display:grid;grid-template-columns:1fr;gap:8px}
+    @media(min-width:680px){.team-grid{grid-template-columns:1fr 1fr}}
+    .team-row{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06)}
+    .team-role{color:rgba(255,255,255,.85);font-weight:600}
+    .team-name{color:rgba(255,255,255,.85)}
+    /* Discounts */
+    .discount-card{padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);line-height:1.3;}
+    .discount-title{font-weight:800;display:flex;align-items:center;gap:8px}
+    .discount-title .icon{font-size:16px}
+    .uniform{font-size:12px;line-height:1.3;color:rgba(255,255,255,.78);}
+    .notice-list{list-style:none;padding-left:0;margin-left:0}
+    .notice-list li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    @media (max-width:700px){ .notice-list li{white-space:normal} }
+    /* Venue */
+    .v-block{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:flex-start;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);padding:14px;}
+    .v-icon{width:36px;height:36px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center}
+    .v-title{font-weight:700;margin-bottom:6px}
+    .v-ul{margin:0;padding-left:16px}
+    .v-ul li{margin:6px 0}
+    /* Social pills */
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:9999px;border:1px solid rgba(255,255,255,.3);font-size:13px;color:#fff}
+    .pill:hover{background:rgba(255,255,255,.1)}
+
+/* === Overrides: hamburger to 3 bars & Program title single-line on mobile === */
+.bars{width:20px;height:14px;position:relative}
+.bars::before,.bars::after,.bars span{content:"";position:absolute;left:0;right:0;height:2px;background:#000;border-radius:1px}
+.bars::before{top:0}
+.bars span{top:6px}
+.bars::after{bottom:0}
+
+/* Force Program title to one line on mobile */
+#program h2{font-size:24px;white-space:nowrap}
+@media(min-width:768px){#program h2{font-size:36px}}
+
+
+/* (애니메이션 기존 클래스 유지) */
+.reveal-wrap{ position: relative; isolation:isolate; }
+.reveal-line{
+  position: relative; z-index: 1;
+  opacity: 0; transform: translateY(28px);
+  transition: transform .8s cubic-bezier(.22,.61,.36,1), opacity .8s ease;
+  transition-delay: var(--d, 0s);
+}
+.reveal-line.show{ opacity: 1; transform: translateY(0); }
+.reveal-h1{ font-weight:700; letter-spacing:.02em; text-transform:uppercase; }
+.reveal-sub{ color:rgba(255,255,255,.92); }
+.reveal-sub2{ color:rgba(255,255,255,.8); }
+@media (min-width:768px){ .reveal-h1{font-size:44px} .reveal-sub,.reveal-sub2{font-size:18px} }
+@media (max-width:767px){ .reveal-h1{font-size:26px} .reveal-sub,.reveal-sub2{font-size:15px} }
+@media (prefers-reduced-motion: reduce){ .reveal-line{transition:none;opacity:1;transform:none} }
+
+/* 4:3 프레임 (유지) */
+.statement-frame{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  background:#000;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* 프레임 안을 가득 덮는 슬라이드 레이어 */
+.statement__slideshow{
+  position:absolute;
+  inset:0;
+}
+
+/* 겹쳐놓고 투명도 전환 */
+.statement__slide{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 1.2s ease-in-out;
+}
+.statement__slide.is-active{ opacity:1 !important; }
+
+/* (선택) 사진 아래 문구 타이포 살짝 키움 */
+.statement-copy .reveal-h1{ letter-spacing:.02em; text-transform:uppercase; }
+@media (min-width:768px){
+  .statement-copy .reveal-h1{ font-size:44px; }
+  .statement-copy .reveal-sub,
+  .statement-copy .reveal-sub2{ font-size:18px; }
+}
+@media (max-width:767px){
+  .statement-copy .reveal-h1{ font-size:26px; }
+  .statement-copy .reveal-sub,
+  .statement-copy .reveal-sub2{ font-size:15px; }
+}
+
+
+/* Mercer-style 순차 등장(기존 reveal 클래스 그대로 사용) */
+.reveal-line{
+  opacity: 0; transform: translateY(28px);
+  transition: transform 1.5s cubic-bezier(.22,.61,.36,1), opacity 1.5s ease;
+  transition-delay: var(--d, .5s);
+}
+.reveal-line.show{ opacity: 1; transform: translateY(0); }
+
+.reveal-h1{ font-weight:700; letter-spacing:.02em; text-transform:uppercase; }
+.reveal-sub{ color:rgba(255,255,255,.92); }
+.reveal-sub2{ color:rgba(255,255,255,.8); }
+
+@media (min-width:768px){
+  .reveal-h1{ font-size:44px }
+  .reveal-sub, .reveal-sub2{ font-size:18px }
+}
+@media (max-width:767px){
+  .reveal-h1{ font-size:26px }
+  .reveal-sub, .reveal-sub2{ font-size:15px }
+}
+@media (prefers-reduced-motion: reduce){
+  .reveal-line{ transition:none; opacity:1; transform:none }
+}
+ :root{
+  --stack-gap-mobile: 28px; /* 모바일 간격 */
+  --stack-gap-desktop: 56px; /* 데스크탑 간격 */
+}
+
+/* Statement 위/아래 동일 간격 */
+#feature{
+  margin-top: var(--stack-gap-mobile);
+  margin-bottom: var(--stack-gap-mobile);
+}
+@media (min-width:768px){
+  #feature{
+    margin-top: var(--stack-gap-desktop);
+    margin-bottom: var(--stack-gap-desktop);
+  }
+}
+
+/* Poster 섹션 상단 패딩을 동일 간격으로 맞춤 */
+#poster{
+  padding-top: var(--stack-gap-mobile) !important;
+}
+@media (min-width:768px){
+  #poster{
+    padding-top: var(--stack-gap-desktop) !important;
+  }
+}
+  #unmuteBtn { box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+
+#soundToggleBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4); /* 검정 반투명 */
+  color: white;
+  font-size: 20px;
+  line-height: 48px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#soundToggleBtn:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: scale(1.05);
+}
+
+
+/* 데스크톱 hover & JS로 여는 상태 둘 다 지원 */
+.prog-card .overlay{ opacity:0; pointer-events:none; transition:opacity .2s; }
+.prog-card.open .overlay{ opacity:1; pointer-events:auto; }
+
+.prog-card.closing .overlay{
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+    
+/* '탭하여 닫기 ✕'는 버튼처럼 보이게 */
+.tap-hint{ cursor:pointer; user-select:none; }
+
+/* 오버레이 닫기 버튼 (오른쪽 아래) */
+.overlay-close{
+  position:absolute; right:12px; bottom:12px;
+  width:30px; height:30px; border-radius:9999px;
+  background:rgba(0,0,0,.45); color:#fff; 
+  font-size:18px; line-height:40px; text-align:center;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+  cursor:pointer; user-select:none;
+  transition:background .2s, transform .15s;
+}
+.overlay-close:hover{ background:rgba(0,0,0,.65); transform:scale(1.05); }
+.overlay-close:focus{ outline:2px solid #fff3; outline-offset:2px; }
+    
+  </style>
+</link></meta></meta></meta></head>
+<body>
+<!-- Slide-out Menu -->
+<aside aria-hidden="true" class="menu-panel" id="sideMenu">
+<div class="p-4 border-b border-white/10 flex items-center justify-between">
+<div class="text-xs uppercase tracking-[.18em] soft">Menu</div>
+<button class="btn3d" id="menuClose" style="padding:6px 12px">닫기 ✕</button>
+</div>
+<nav class="py-2">
+<a class="menu-link" href="#top">Top</a>
+<a class="menu-link" href="#feature">Intro</a>
+<a class="menu-link" href="#poster">Poster</a>
+<a class="menu-link" href="#program">Program</a>
+<a class="menu-link" href="#artists">Artists</a>
+<a class="menu-link" href="#team">Creative Team</a>
+<a class="menu-link" href="#tickets">Discount Information</a>
+<a class="menu-link" href="#venue">Venue</a>
+<a class="menu-link" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide" target="_blank">예매하기 →</a>
+</nav>
+</aside>
+<!-- Top nav -->
+<nav class="nav fixed top-0 left-0 right-0 z-40 h-16">
+<div class="container mx-auto h-full px-3 grid grid-cols-[auto_1fr_auto] items-center gap-2">
+<button aria-controls="sideMenu" aria-expanded="false" aria-label="Open menu" class="btn3d circle" id="menuBtn"><span class="bars"><span></span></span></button>
+<a class="block text-center leading-tight justify-self-center" href="#top">
+<span class="block text-[12px] md:text-[12px] title-top uppercase">MUSICSCAPE</span>
+<span class="block text-[12px] md:text-[12px] title-bottom uppercase">AT THE EDGE OF SHADOW</span>
+</a>
+<a class="btn3d" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide">예매</a>
+</div>
+</nav>
+<!-- Hero -->
+<header class="relative w-full h-[70vh] md:h-screen overflow-hidden" id="top">
+<div class="absolute top-0 left-0 w-full h-full" id="heroPlayer"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/60"></div>
+<!-- 소리 켜기 버튼 -->
+<button aria-label="Toggle sound" class="btn3d circle absolute top-20 right-6 z-10" id="soundToggleBtn">
+  🔇
+</button>
+</header>
+<!-- Statement (4:3 프레임 슬라이드 + 아래 텍스트) -->
+<section class="py-14 border-t border-white/10" id="feature">
+<div class="container mx-auto px-6 max-w-3xl">
+<!-- 4:3 프레임: 배경 슬라이드만 -->
+<div class="statement-frame relative overflow-hidden">
+<div aria-hidden="true" class="statement__slideshow"></div>
+</div>
+<!-- 사진 아래 문구 -->
+<div class="statement-copy text-center mt-6">
+<h1 class="reveal-line reveal-h1" style="--d:0s;">IMMERSIVE MUSIC EXPERIENCE</h1>
+<p class="reveal-line reveal-sub mt-4" style="--d:.15s;">사운드, 영상, 빛이 직조하는 감각의 무대</p>
+<p class="reveal-line reveal-sub2 mt-2" style="--d:.30s;">
+        음악은 희미한 경계를 넘어 우리 안의 기억과 바람을 깨운다. 
+      </p>
+<p class="reveal-line reveal-sub3 mt-2" style="--d:.45s;">
+        그림자에 머문 시간은 지나, 이제 우리는 빛을 향해 나아간다. 
+      </p>
+</div>
+</div>
+</section>
+<!-- Poster -->
+<section class="bg-black py-8 border-t border-white/10" id="poster">
+<div class="container mx-auto px-6 max-w-3xl">
+<picture><source srcset="images/poster.webp" type="image/webp"/><img alt="공연 포스터" class="w-full rounded-xl border border-white/10 shadow-lg" src="images/poster.jpg"/></picture>
+</div>
+</section>
+<!-- Program -->
+<section class="bg-black py-20 border-t border-white/10" id="program">
+<div class="container mx-auto px-6">
+<div class="flex items-end justify-between mb-10">
+<div>
+<div class="eyebrow mb-2">Program</div>
+<h2 class="text-[30px] md:text-[36px] font-semibold">From Here to Everywhere</h2>
+<p class="soft mt-1 text-sm">카드를 눌러 곡 설명을 확인하세요.</p>
+</div>
+<a class="hidden md:inline-flex btn3d" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide">예매</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_forest.webp" type="image/webp"/><img alt="숲" class="w-full h-64 object-cover" src="images/program_forest.jpg"/></picture><div class="title">숲</div><div class="overlay"><p class="text-sm leading-7">  숲에 들어설 때마다 나무들은 저마다의 자리를 지키며 선명한 존재감을 드러낸다. 특히 소나무와 잣나무 숲 사이로 스며드는 빛과 바람, 솔잎의 향기는 언제나 마음을 맑게 한다. 이 곡은 그런 숲의 풍경을 통해 ‘자신의 자리를 묵묵히 지켜내는 이들의 삶’을 음악으로 비춘 작품이다. 2022년 기타 독주로 발표되었으며, 이번 무대에서는 바이올린과의 이중주로 연주된다.</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_sea_mountain.webp" type="image/webp"/><img alt="바다, 산" class="w-full h-64 object-cover" src="images/program_sea_mountain.jpg"/></picture><div class="title">바다, 산</div><div class="overlay"><p class="text-sm leading-7">  산을 오르는 길은 늘 오르막과 내리막, 고요와 험난함이 교차한다. 짙은 그늘을 지나 다시 빛을 마주하는 순간, 인간은 자연의 풍경 속에서 자신의 삶을 비춰보게 된다.
+이 곡은 그런 산행의 여정을 음악으로 옮긴 작품이다. 기타의 선율은 산길의 오르막과 내리막을 지나 정상에서 마주하는 빛을 노래하며, 삶의 굴곡 끝에 피어나는 성취와 희망을 상징한다.
+‘바다’는 끝없이 반복되는 파도의 리듬을 따라 흐르는 곡이다. 파도는 매번 같은 자리로 밀려오지만, 그 울림 속에는 다채로운 빛깔의 위로가 숨어 있다. 오래 바라보고 있으면 어느새 한 가지 진실만을 고요히 되뇌는 듯하다. 끊임없이 다가오고 물러서는 파도의 숨결은, 삶을 버텨내는 우리에게 변치 않는 어떤 답을 속삭이며 마음을 다독인다.
+두 곡은 여행과 일상에서 얻은 풍경을 음악으로 번역한 연작 ‘음악적 풍경(Musicscape)’의 일부로, 자연 속에 깃든 시간과 인간의 삶을 서정적으로 비춘 작품이다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_calligraphy.webp" type="image/webp"/><img alt="서(書)" class="w-full h-64 object-cover" src="images/program_calligraphy.jpg"/></picture><div class="title">서(書)</div><div class="overlay"><p class="text-sm leading-7">  이 곡은 서예의 호흡과 필법, 그리고 그 안에 담긴 정신에서 출발한다. 각 섹션은 붓의 획이 이어지듯 변화하면서도 끊김 없이 이어지며, 다양한 주법은 먹의 농담과 필선의 기세를 음악으로 번역한다.
+〈서〉는 작곡가 최인이 과거 예술의전당 서예박물관에서 열린 기획전 최치원전에 참여하며 탄생했다. 그는 여러 분야 예술가들과 함께 최치원의 삶과 정신을 연구하고 답사한 뒤, 각자의 작품을 선보였고, 그 과정에서 이 곡을 완성했다.
+서예라는 우수한 우리 문화에 대한 헌정이자, 동시에 최치원의 삶과 정신을 담아낸 작품이다. 글을 쓰기 전 호흡을 가다듬고 마음을 곧게 세우는 선비들의 태도에서 깊은 감동을 받아, 이를 음악으로 표현하고자 했다. 곡 속에는 우리 전통문화의 깊은 정신성과 그것을 알리고자 하는 작곡가의 열망이 깃들어 있다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_road.webp" type="image/webp"/><img alt="가던길" class="w-full h-64 object-cover" src="images/program_road.jpg"/></picture><div class="title">가던길</div><div class="overlay"><p class="text-sm leading-7">  나그네가 길 위에서 만나는 풍경과 사람들, 그리고 다시 떠나야 하는 순간에서 영감을 얻은 곡이다. 여정은 경기에서 정선, 태백과 삼척으로 이어지지만, 이 길은 단순한 여행이 아니라 삶 그 자체의 은유이기도 하다. 만남과 이별, 기쁨과 슬픔, 삶의 희로애락이 길 위에서 교차한다.
+메나리조 선율은 각 지역의 정서를 담아 흘러가며, 그 선율 속에서 여행길은 인생의 궤적처럼 깊이를 더한다. 피리와 기타의 대화는 서로 다른 세계가 만나 부딪히고 어우러지며, 전통과 현대가 교차하는 순간에 새로운 울림을 만들어낸다.
+이 곡은 나그네가 걸어가는 길이 결국 우리의 삶과 다르지 않음을 보여준다. 익숙한 듯 낯선 선율은 관객에게 자기 삶의 여정을 비추어 보게 하고, 음악 속에서 잔잔한 위로와 깨달음을 남긴다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_seokpoong.webp" type="image/webp"/><img alt="석풍수" class="w-full h-64 object-cover" src="images/program_seokpoong.jpg"/></picture><div class="title">석풍수</div><div class="overlay"><p class="text-sm leading-7">  건축가 이타미 준(유동룡)의 제주 건축 작품 〈석풍수〉에서 받은 인상으로 작곡된 곡이다. 하늘과 땅, 인간을 잇는 ‘천지인(天地人)’의 사상과 제주의 바람·돌·물의 요소가 건축에 스며든 장면에서 깊은 감명을 받았다. 이 곡은 건축이 품은 철학과 공간을 직접 체험한 감각을 음악으로 전환한 작품이다. 
+기타의 울림은 바람과 돌, 물의 감각을 담아내며, 자연과 인간, 그리고 사람을 귀하게 여기는 건축가와 음악가의 따뜻한 마음이 만나 하나의 서정적 풍경으로 그려진다. 클래식기타에 대한 깊은 이해를 바탕으로 쓰인 이 곡은 연주 기법적으로도 완성도가 높으며, 기타의 울림을 통해 제주의 풍경과 건축, 그리고 인간의 정신이 교차하는 순간을 경험하게 한다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_dawn.webp" type="image/webp"/><img alt="DAWN" class="w-full h-64 object-cover" src="images/program_dawn.jpg"/></picture><div class="title">DANW</div><div class="overlay"><p class="text-sm leading-7">  새벽의 첫빛이 어둠을 스미듯 밀어내며 공간을 물들이는 순간을 그린 곡이다. 긴 정적 속에서 서서히 살아나는 리듬과 선율은 하루의 시작, 그리고 마음의 각성을 상징한다. 잔잔하지만 단단한 에너지가 곡 전체를 이끌며,조용한 여명 속에서 다시 한 번 스스로를 일으켜 세우는 힘을 노래한다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_space.webp" type="image/webp"/><img alt="공간 1,2,3" class="w-full h-64 object-cover" src="images/program_space.jpg"/></picture><div class="title">공간 1,2,3 </div><div class="overlay"><p class="text-sm leading-7">  ‘공간’은 물리적 장소가 아니라 감정이 숨 쉬고 사유가 머무는 내면의 자리를 뜻한다. 2016년에 시작된 이 연작은 이번 공연에서 기타, 바이올린, 첼로의 삼중주로 새롭게 편곡되어 선보인다.
+1악장은 자유로운 흐름 속에서 움직임의 가능성을 탐색하고, 2악장은 내면의 회복과 감정의 확장을 통해 깊이를 더한다. 마지막 3악장은 변화와 성장의 완결로 닫히며, 세 악장은 서로 다른 결의 정서가 하나로 이어지는 감정의 지형도를 완성한다. 섬세한 음색과 여백의 울림이, 우리 안의 고요한 ‘공간’을 깨운다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_who.webp" type="image/webp"/><img alt="Who am A.I." class="w-full h-64 object-cover" src="images/program_who.jpg"/></picture><div class="title">Who am A.I.</div><div class="overlay"><p class="text-sm leading-7">  Who am I? Who am A.I.?
+인간과 인공지능이 서로를 비추는 시대, 이 곡은 그 경계에서 태어났다. 입체음향과 전자적 질감이 교차하며 현실과 가상의 경계가 흐려지고, 그 안에서 악기들의 숨결은 인간만이 지닌 불완전함과 따뜻함을 들려준다. 인간과 기술이 서로의 거울이 되어가는 시대의 정체성 혼란을 드러내며,
+기술이 인간을 닮아갈수록, 인간다움의 본질은 무엇으로 남는가… 그 물음에 대한 음악적 사유가 이 곡의 중심에 놓여 있다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_shadow.webp" type="image/webp"/><img alt="그림자의 경계에서" class="w-full h-64 object-cover" src="images/program_shadow.jpg"/></picture><div class="title">그림자의 경계에서</div><div class="overlay"><p class="text-sm leading-7">  빛과 어둠이 맞물리는 경계의 순간, 우리는 그 어딘가에 서 있다.
+삶의 불안과 내적인 갈등 속에서 음악은 중심을 잡고 의미를 찾아 나서며, 점층적으로 고조되는 리듬과 울림은 거대한 파도를 헤치며 다시 빛을 향해 나아가는 인간의 의지를 그려낸다. 이 곡은 불확실한 경계의 시대를 걸어가며, 빛을 향해 나아가는 모든 이들을 위한 응원의 노래다.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+<article class="prog-card relative card overflow-hidden group"><picture><source srcset="images/program_bluehour.webp" type="image/webp"/><img alt="Bluehour" class="w-full h-64 object-cover" src="images/program_bluehour.jpg"/></picture><div class="title">Bluehour</div><div class="overlay"><p class="text-sm leading-7">  해가 저물고 완전한 어둠이 오기 전, 세상이 푸른 빛으로 물드는 찰나의 시간. 모든 색이 머물다 사라지는 그 순간, 음악은 빛의 마지막 숨결을 따라 고요히 스며든다. 하루를 돌아보며 감사와 평온을 느끼게 하는 사색의 노래.
+</p><span class="tap-hint">탭하여 닫기 ✕</span></div></article>
+</div>
+<div class="mt-12 text-center md:hidden"><a class="btn3d" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide">예매</a></div>
+</div>
+</section>
+<!-- Artists -->
+<section class="bg-black py-16 border-t border-white/10" id="artists">
+<div class="container mx-auto px-6">
+<div class="eyebrow mb-3">Artists</div>
+<div class="artist-card card p-5 mb-8">
+<picture><source srcset="images/artist_inchoi.webp" type="image/webp"/><img alt="최인" class="artist-photo" src="images/artist_inchoi.jpg"/></picture>
+<div>
+<h3 class="text-2xl font-semibold mb-1">최인 <span class="soft text-base">Composer, Guitarist</span></h3>
+<div class="mt-2 flex flex-wrap items-center gap-2">
+<a class="pill" href="https://instagram.com/inchoiguitar" target="_blank">
+<svg aria-hidden="true" class="inline-block -mt-px" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="igColor1" x1="0" x2="24" y1="24" y2="0">
+<stop stop-color="#F58529"></stop>
+<stop offset="0.5" stop-color="#DD2A7B"></stop>
+<stop offset="1" stop-color="#8134AF"></stop>
+</lineargradient>
+</defs>
+<rect fill="url(#igColor1)" height="20" rx="5" width="20" x="2" y="2"></rect>
+<circle cx="12" cy="12" fill="none" r="5" stroke="#fff" stroke-width="2"></circle>
+<circle cx="17.5" cy="6.5" fill="#fff" r="1.3"></circle>
+</svg>
+<span>@inchoiguitar</span>
+</a>
+<a class="pill" href="https://www.inchoi.kr/" target="_blank">🌐 <span>inchoi.kr</span></a>
+<a class="pill" href="https://youtube.com/@inchoi2041?si=Aanygpt10OpMuB0r" target="_blank">
+<svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<rect fill="#FF0000" height="16" rx="3" width="20" x="2" y="4"></rect>
+<polygon fill="#fff" points="10,8 16,12 10,16"></polygon>
+</svg>
+<span>@inchoi2014</span>
+</a>
+</div>
+<div class="muted leading-8 text-[15px] mt-4">  기타리스트 겸 작곡가 최인은 한국에서 다수의 콩쿨에서 입상하며 주목을 받기 시작하였으며, 서울대학교 음악대학 기악과를 졸업하고 벨기에로 유학, 레멘스인스튜트(Lemmensinstituut)에서 석사학위를 그리고 독일 로스톡 국립음대(Hochschule für Musik und Theater, Rostock)에서 콘체르트엑자멘 과정을 만점으로 졸업하였다.
+
+ 독일을 중심으로 다양한 실내악과 독주활동을 펼쳐왔으며 서울대 현악합주, 원주시향, 부천신포니에타, 인천시향과의 협연 및 다수의 독주회, 라디오 출연, 드라마 OST 작곡 및 연주, 피에스타 기타 앙상블, 기타 쿼텟 Imagine, 듀오 카프리치오소의 리더로 활동해왔다. 또한 세종솔로이스츠와 서울시향의 객원 연주자로 무대에 오르며 활발한 연주 활동을 이어왔다.
+
+ 다양한 레퍼토리와 학구적이고 감성적인 그의 연주는 유럽과 한국에서 많은 호평을 받은 바 있다. 또한 다양한 동시대적 주제들을 가지고 꾸준히 기타 독주와 실내악곡들을 창작·연주해 가고 있으며, 영상·인터랙티브 그래픽·프로젝션 맵핑 등을 활용하여 음악과 표현의 영역을 더욱 확장해가고 있다.</div>
+</div>
+</div>
+<div class="artist-card card p-5 mb-8">
+<picture><source srcset="images/artist_yhs.webp" type="image/webp"/><img alt="유현수" class="artist-photo" src="images/artist_yhs.jpg"/></picture>
+<div>
+<h3 class="text-2xl font-semibold mb-1">유현수 <span class="soft text-base">피리</span></h3>
+<div class="mt-2 flex flex-wrap items-center gap-2">
+<a class="pill" href="https://instagram.com/piri.hyunsoo_you" target="_blank">
+<svg aria-hidden="true" class="inline-block -mt-px" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="igColor2" x1="0" x2="24" y1="24" y2="0">
+<stop stop-color="#F58529"></stop>
+<stop offset="0.5" stop-color="#DD2A7B"></stop>
+<stop offset="1" stop-color="#8134AF"></stop>
+</lineargradient>
+</defs>
+<rect fill="url(#igColor2)" height="20" rx="5" width="20" x="2" y="2"></rect>
+<circle cx="12" cy="12" fill="none" r="5" stroke="#fff" stroke-width="2"></circle>
+<circle cx="17.5" cy="6.5" fill="#fff" r="1.3"></circle>
+</svg>
+<span>@piri.hyunsoo_you</span>
+</a>
+</div>
+<div class="muted leading-8 text-[15px] mt-4">  국립국악고등학교를 졸업하고 서울대학교에서 학사·석사·박사 과정을 모두 마쳤다. 국가무형문화재 ‘피리정악 및 대취타’ 이수자이자 ‘종묘제례악’ 전수자로, 전통음악의 품격을 전승하는 동시에 현대적 감각으로 관객의 마음을 울린다. 제68회 조선일보 신인음악회를 시작으로 국내 주요 무대와 오스트리아, 헝가리, 독일, 카메룬, 일본 등에서 초청 공연을 통해 피리의 존재감을 세계에 알렸으며, 현재 수원대학교 국악과 겸임교수로 재직 중이다.</div>
+</div>
+</div>
+<div class="artist-card card p-5">
+<picture><source srcset="images/artist_jrpark.webp" type="image/webp"/><img alt="박재린" class="artist-photo" src="images/artist_jrpark.jpg"/></picture>
+<div>
+<h3 class="text-2xl font-semibold mb-1">박재린 <span class="soft text-base">Violin</span></h3>
+<div class="mt-2 flex flex-wrap items-center gap-2">
+<a class="pill" href="https://instagram.com/jaelin.violin" target="_blank">
+<svg aria-hidden="true" class="inline-block -mt-px" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="igColor3" x1="0" x2="24" y1="24" y2="0">
+<stop stop-color="#F58529"></stop>
+<stop offset="0.5" stop-color="#DD2A7B"></stop>
+<stop offset="1" stop-color="#8134AF"></stop>
+</lineargradient>
+</defs>
+<rect fill="url(#igColor3)" height="20" rx="5" width="20" x="2" y="2"></rect>
+<circle cx="12" cy="12" fill="none" r="5" stroke="#fff" stroke-width="2"></circle>
+<circle cx="17.5" cy="6.5" fill="#fff" r="1.3"></circle>
+</svg>
+<span>@jaelin.violin</span>
+</a>
+</div>
+<div class="muted leading-8 text-[15px] mt-4">  예원·서울예고와 연세대 음악대학을 졸업 후, 독일 쾰른 국립음대에서 전문연주자과정과 솔로·실내악 석사를 수료했다. 한국일보·스트라드·성정 콩쿠르 등 다수의 국내외 콩쿠르에서 입상하며 주목받았고, 예술의전당 콘서트홀을 비롯한 주요 무대에서 프라임 필하모닉 오케스트라 등 여러 오케스트라와 협연하였다.
+ 현재 서울 네오 필하모닉 오케스트라, 안산 필하모닉 오케스트라, 리움 챔버오케스트라의 악장이자, 린트리오 및 로드 앙상블의 리더로 활동하고 있다. 또한 상명대, 숭실대, 경기예고 등에 출강하며 후학 양성에도 힘쓰고 있다.</div>
+</div>
+</div>
+<div class="artist-card card p-5">
+<picture><source srcset="images/artist_khpark.webp" type="image/webp"/><img alt="박기흥" class="artist-photo" src="images/artist_khpark.jpg"/></picture>
+<div>
+<h3 class="text-2xl font-semibold mb-1">박기흥 <span class="soft text-base">Cello</span></h3>
+<div class="mt-2 flex flex-wrap items-center gap-2">
+<a class="pill" href="https://instagram.com/vc_keeheung" target="_blank">
+<svg aria-hidden="true" class="inline-block -mt-px" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="igColor3" x1="0" x2="24" y1="24" y2="0">
+<stop stop-color="#F58529"></stop>
+<stop offset="0.5" stop-color="#DD2A7B"></stop>
+<stop offset="1" stop-color="#8134AF"></stop>
+</lineargradient>
+</defs>
+<rect fill="url(#igColor3)" height="20" rx="5" width="20" x="2" y="2"></rect>
+<circle cx="12" cy="12" fill="none" r="5" stroke="#fff" stroke-width="2"></circle>
+<circle cx="17.5" cy="6.5" fill="#fff" r="1.3"></circle>
+</svg>
+<span>@vc_keeheung</span>
+</a>
+</div>
+<div class="muted leading-8 text-[15px] mt-4">  첼리스트 박기흥은 모스크바 차이콥스키 영재원을 졸업하고, 모스크바 그네신 국립음악원을 수석으로 졸업하였다. 슬라브 국제 콩쿠르 첼로 부문 1위를 수상하고, 모스크바 필하모닉 비상임 단원으로 활동하였다. 현재 성남시향, 원주시향, 인천시향의 객원 연주자로 참여하고 있으며, 중국 베이징 소재 음악학교에 출강 중이다. 중국 SSR Music Entertainment 소속 아티스트로, 국내외에서 활발한 연주 활동을 이어가고 있다.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Creative Team -->
+<section class="bg-black py-16 border-t border-white/10" id="team">
+<div class="container mx-auto px-6">
+<div class="eyebrow mb-3">Creative Team</div>
+<div class="team-grid">
+<div class="team-row"><div class="team-role">연출, 음악감독</div><div class="team-name">최인</div></div>
+<div class="team-row"><div class="team-role">기술감독</div><div class="team-name">이장용 (주)달하</div></div>
+<div class="team-row"><div class="team-role">음향디자인, 음향감독</div><div class="team-name">이수용</div></div>
+<div class="team-row"><div class="team-role">영상디자인, 영상감독</div><div class="team-name">이뿌리</div></div>
+<div class="team-row"><div class="team-role">조명디자인, 조명감독</div><div class="team-name">최예원</div></div>
+<div class="team-row"><div class="team-role">무대감독</div><div class="team-name">신재경 (주)달하 </div></div>
+<div class="team-row"><div class="team-role">조연출</div><div class="team-name">이미리</div></div>
+<div class="team-row"><div class="team-role">영상 촬영·제작</div><div class="team-name">DAN 최영광</div></div>
+<div class="team-row"><div class="team-role">제작·홍보</div><div class="team-name">피셔인젤 예술기획</div></div>
+</div>
+</div>
+</section>
+<!-- Tickets & Discounts -->
+<section class="bg-black py-16 border-t border-white/10" id="tickets">
+<div class="container mx-auto px-6">
+<h3 class="text-2xl md:text-3xl font-semibold mb-6">Tickets</h3>
+<div class="card p-6 mb-8 flex items-center justify-between gap-4 flex-wrap">
+<div class="soft">전석 50,000원 · 예술의 전당  · NOL 티켓</div>
+<a class="btn3d" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide">예매</a>
+</div>
+<div class="eyebrow mb-3">Discounts</div>
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">💳</span>회원할인</div><span class="btn3d" style="padding:6px 10px">등급별상이</span></div><div class="uniform">예술의전당 회원할인</div><div class="uniform mt-1">증빙:예매 페이지 참조</div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">⏰</span>조기예매</div><span class="btn3d" style="padding:6px 10px">30%</span></div><div class="uniform">~ 2025.10.31 예매 시</div><div class="uniform mt-1">증빙: - </div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">🧑‍🎓</span>청소년</div><span class="btn3d" style="padding:6px 10px">30%</span></div><div class="uniform">전국 초,중,고등학생 </div><div class="uniform mt-1">증빙: 신분증/학생증</div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">♿</span>장애인</div><span class="btn3d" style="padding:6px 10px">50%</span></div><div class="uniform">등록 장애인 (보호자 1인 포함 가능)</div><div class="uniform mt-1">증빙: 장애인등록증</div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">🎖️</span>국가유공자</div><span class="btn3d" style="padding:6px 10px">50%</span></div><div class="uniform">국가유공자 및 유족</div><div class="uniform mt-1">증빙: 유공자증/유족증</div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">🏃‍♀️</span>릴레이티켓할인</div><span class="btn3d" style="padding:6px 10px">50%</span></div><div class="uniform">최인기타리사이틀 10월공연 관람자</div><div class="uniform mt-1">10월 최인기타리사이틀 공연티켓</div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">🪄</span>수능수험생할인</div><span class="btn3d" style="padding:6px 10px">50%</span></div><div class="uniform">2026수능수험생</div><div class="uniform mt-1">2026학년도 대학수학능력시험 본인수험표</div></div>
+<div class="discount-card"><div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">🎭</span>예술인</div><span class="btn3d" style="padding:6px 10px">20%</span></div><div class="uniform">예술인패스 소지자</div><div class="uniform mt-1">증빙: 예술인패스</div></div>
+<div class="discount-card sm:col-span-2 lg:col-span-3">
+<div class="flex items-center justify-between mb-1"><div class="discount-title"><span class="icon">👥</span>단체할인</div><span class="btn3d" style="padding:6px 10px">30%</span></div>
+<div class="uniform">10인 이상(기획사 문의)</div>
+<div class="uniform mt-1">문의: 070-4220-3287 / 카카오톡 피셔인젤 예술기획</div>
+</div>
+</div>
+<div class="card p-5 mt-8">
+<div class="eyebrow mb-1">Notice</div>
+<ul class="notice-list uniform">
+<li>모든 할인은 실 관람자 기준 적용, 중복 적용 불가</li>
+<li>할인 대상 본인이 직접 증빙 후 수령(대리 수령·양도 불가)</li>
+<li>증빙자료 미지참 시 정가 대비 차액 지불</li>
+<li>공연 당일 취소/변경/환불 및 현장 할인율 변경 불가</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Venue -->
+<section class="bg-black py-16 border-t border-white/10" id="venue">
+<div class="container mx-auto px-6">
+<div class="eyebrow mb-2">Venue</div>
+<h3 class="text-[30px] md:text-[36px] font-semibold mb-3">예술의 전당 자유소극장</h3>
+<p class="soft">서울특별시 서초구 남부순환로 2406</p>
+<p class="soft mb-4">대표전화 02-1668-1352</p>
+<div class="grid gap-6">
+<div class="v-block">
+<div class="v-icon">
+<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><rect height="14" rx="3" width="16" x="4" y="3"></rect><circle cx="8.5" cy="16.5" r="1.5"></circle><circle cx="15.5" cy="16.5" r="1.5"></circle><path d="M6 20h12"></path></svg>
+</div>
+<div>
+<div class="v-title">지하철 이용</div>
+<ul class="v-ul soft text-sm">
+<li>3호선 남부터미널역 5번출구</li>
+<li> 1) 도보이동 (약5~10분 소요)</li>
+<li> 2) 마을버스 22번(초록색)을 타고 두 정거장 이동</li>
+<li>2호선 서초역 3번출구</li>
+<li> 1) 마을버스 11번(초록색)을 타고 네 정거장 이동</li>
+<li>4호선 사당역 1번출구</li>
+<li> 1) 마을버스 17번(초록색)을 타고 16개 정거장 이동</li>
+</ul>
+</div>
+</div>
+<div class="v-block">
+<div class="v-icon">
+<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><rect height="13" rx="3" width="18" x="3" y="4"></rect><circle cx="7" cy="18" r="1.5"></circle><circle cx="17" cy="18" r="1.5"></circle></svg>
+</div>
+<div>
+<div class="v-title">버스 이용</div>
+<ul class="v-ul soft text-sm">
+<li>간선 406,405 </li>
+<li>지선 5413 </li>
+<li>직행 1500-2, 1553 </li>
+<li>마을 서초11, 서초17, 서초22 </li>
+</ul>
+</div>
+</div>
+<div class="v-block">
+<div class="v-icon">
+<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M3 19v-6l3-4h12l3 4v6"></path><circle cx="7.5" cy="19" r="1.5"></circle><circle cx="16.5" cy="19" r="1.5"></circle><path d="M7 7h5a3 3 0 0 1 0 6H7z"></path></svg>
+</div>
+<div>
+<div class="v-title">주차 안내</div>
+
+</div>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<a class="btn3d" href="https://map.naver.com/v5/search/%EC%9D%B8%EC%B2%9C%20%EC%A4%91%EA%B5%AC%EB%AC%B8%ED%99%94%ED%9A%8C%EA%B4%80" target="_blank">네이버 지도 열기</a>
+<a class="btn3d" href="https://maps.google.com/?q=%EC%9D%B8%EC%B2%9C%20%EC%A4%91%EA%B5%AC%EB%AC%B8%ED%99%94%ED%9A%8C%EA%B4%80" target="_blank">Google 지도 열기</a>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="text-white/80 text-sm py-10 text-center border-t border-white/10">
+<div class="container mx-auto px-6 flex flex-col items-center gap-4">
+<div class="flex flex-col md:flex-row items-center gap-3 md:gap-6">
+<a class="inline-flex items-center gap-2 hover:opacity-90" href="https://instagram.com/fischerinsel" target="_blank">
+<svg class="icon" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<defs><lineargradient gradientunits="userSpaceOnUse" id="ig2" x1="0" x2="24" y1="24" y2="0"><stop stop-color="#F58529"></stop><stop offset="0.5" stop-color="#DD2A7B"></stop><stop offset="1" stop-color="#8134AF"></stop></lineargradient></defs>
+<rect fill="url(#ig2)" height="20" rx="5" width="20" x="2" y="2"></rect><circle cx="12" cy="12" fill="none" r="5" stroke="#fff" stroke-width="2"></circle><circle cx="17.5" cy="6.5" fill="#fff" r="1.3"></circle></svg>
+<span>@fischerinsel</span>
+</a>
+<a class="inline-flex items-center gap-2 hover:opacity-90" href="mailto:fischerinsel2014@gmail.com">
+<svg class="icon" fill="none" height="18" stroke="#fff" stroke-width="2" viewbox="0 0 24 24" width="18"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 7l9 6 9-6"></path></svg>
+<span>fischerinsel2014@gmail.com</span>
+</a>
+<a class="inline-flex items-center gap-2 hover:opacity-90" href="tel:07042203287">
+<svg class="icon" fill="none" height="18" stroke="#fff" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.89.33 1.76.62 2.59a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.49-1.14a2 2 0 0 1 2.11-.45c.83.29 1.7.5 2.59.62A2 2 0 0 1 22 16.92z"></path></svg>
+<span>070-4220-3287</span>
+</a>
+</div>
+<div class="soft leading-6 text-center">
+<div>MUSICSCAPE</div>
+<div>'AT THE EDGE OF SHADOW'</div>
+<div>FISCHERINSEL ARTS</div>
+<div class="mt-2 text-xs">© 2025 FISCHERINSEL ARTS. All rights reserved.</div>
+</div>
+</div>
+</footer>
+<script>
+    // Slide menu logic
+    const sideMenu = document.getElementById('sideMenu');
+    const menuBtn = document.getElementById('menuBtn');
+    const menuClose = document.getElementById('menuClose');
+    function openMenu(){ sideMenu.classList.add('open'); sideMenu.setAttribute('aria-hidden','false'); menuBtn.setAttribute('aria-expanded','true'); }
+    function closeMenu(){ sideMenu.classList.remove('open'); sideMenu.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); }
+    menuBtn.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+    sideMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+  </script>
+<!-- 공유 버튼 (링크 복사) -->
+<button aria-label="링크 복사" class="btn3d circle fixed bottom-6 right-6 z-50" onclick="copyLink()">🔗</button>
+<script>
+    function copyLink() {
+      const link = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(() => {
+          alert("✅ 링크가 복사되었습니다! 친구에게 붙여넣어 보세요.");
+        }).catch(() => fallbackCopy(link));
+      } else {
+        fallbackCopy(link);
+      }
+    }
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); alert("✅ 링크가 복사되었습니다!"); }
+      catch(e){ alert("복사 실패: " + e); }
+      document.body.removeChild(ta);
+    }
+  </script>
+<script>
+  // IntersectionObserver로 줄별 순차 등장
+  (function(){
+    const lines = document.querySelectorAll('#feature .reveal-line');
+    if (!('IntersectionObserver' in window) || !lines.length){
+      // 폴백: 애니메이션 없이 표시
+      lines.forEach(el => el.classList.add('show'));
+      return;
+    }
+    const io = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('show');
+          obs.unobserve(e.target); // 한 번만 실행
+        }
+      });
+    }, { threshold: 0.25 });
+    lines.forEach(el => io.observe(el));
+  })();
+</script>
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  let player;
+  let isMuted = true; // 시작은 음소거
+
+  function onYouTubeIframeAPIReady(){
+    player = new YT.Player('heroPlayer', {
+      videoId: '4tJQ3M9aYaQ', // 영상 ID
+      playerVars: {
+        autoplay: 1,
+        mute: 1,             // 시작은 무음
+        loop: 1,
+        playlist: '4tJQ3M9aYaQ',
+        controls: 0,
+        modestbranding: 1,
+        rel: 0,
+        playsinline: 1
+      },
+      events: {
+        onReady: (e) => e.target.playVideo()
+      }
+    });
+  }
+
+document.addEventListener('DOMContentLoaded', function(){
+  const btn = document.getElementById('soundToggleBtn');
+  btn.addEventListener('click', function(){
+    if (!player) return;
+
+    if (isMuted){
+      player.unMute();
+      player.setVolume(100);
+      btn.textContent = '🔊';
+      isMuted = false;
+    } else {
+      player.mute();
+      btn.textContent = '🔇';
+      isMuted = true;
+    }
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.prog-card').forEach((card) => {
+    const overlay = card.querySelector('.overlay');
+    const hint = card.querySelector('.tap-hint');
+
+    // 카드 탭/클릭 → 열기
+    card.addEventListener('click', () => {
+      card.classList.add('open');
+    });
+
+    // "탭하여 닫기" 텍스트는 숨기거나 제거(선택)
+    if (hint) { hint.style.display = 'none'; }
+
+    // 닫기 버튼이 없으면 자동 생성
+    let closeBtn = overlay.querySelector('.overlay-close');
+    if (!closeBtn) {
+      closeBtn = document.createElement('button');
+      closeBtn.className = 'overlay-close';
+      closeBtn.setAttribute('aria-label','닫기');
+      closeBtn.textContent = '✕';
+      overlay.appendChild(closeBtn);
+    }
+
+const close = (e) => {
+  e.stopPropagation();
+  card.classList.remove('open');
+  card.classList.add('closing');         // hover보다 우선해서 닫힘 유지
+};
+
+// X 버튼에 적용
+closeBtn.addEventListener('click', close);
+
+// 마우스가 카드 밖으로 나가면 closing 해제 (다시 hover 정상 동작)
+card.addEventListener('mouseleave', () => {
+  card.classList.remove('closing');
+});
+
+
+    // 배경 빈공간 탭으로는 닫히지 않게 하려면 overlay 클릭 핸들러 추가하지 않음
+    // (혹시 이전에 overlay 클릭으로 닫는 코드가 있으면 제거하세요)
+  });
+});
+</script>
+<script>
+(function () {
+  // ① 슬라이드에 사용할 이미지들 (images 폴더에 업로드)
+  const IMAGES = [
+    'images/statement01.jpg',
+    'images/statement02.jpg',
+    'images/statement03.jpg',
+    'images/statement04.jpg',
+    'images/statement05.jpg',
+
+
+  ];
+
+  // ② 타이밍 설정
+  const DISPLAY_MS = 3000; // 한 장 보이는 시간
+  const FADE_MS    = 1200; // 페이드 시간 (CSS와 맞춤)
+
+  // ③ 호스트 엘리먼트
+  const host = document.querySelector('.statement__slideshow');
+  if (!host || !IMAGES.length) return;
+
+  // 모션 최소화 설정 사용자는 애니메이션 생략
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ④ 이미지 프리로드 후 DOM 주입
+  const preload = src => new Promise(res => { const i = new Image(); i.onload = res; i.src = src; });
+  Promise.all(IMAGES.map(preload)).then(() => {
+    IMAGES.forEach((src, idx) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';                 // 장식용
+      img.decoding = 'async';
+      img.loading  = 'eager';
+      img.className = 'statement__slide';
+      if (idx === 0) img.classList.add('is-active');
+      host.appendChild(img);
+    });
+
+    if (prefersReduced || IMAGES.length < 2) return;
+
+    // ⑤ 순환 재생
+    let current = 0;
+    const slides = Array.from(host.querySelectorAll('.statement__slide'));
+    setInterval(() => {
+      const next = (current + 1) % slides.length;
+      slides[current].classList.remove('is-active');
+      slides[next].classList.add('is-active');
+      current = next;
+    }, DISPLAY_MS);
+  });
+})();
+</script>
+</body>
+</html>
