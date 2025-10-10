@@ -508,12 +508,27 @@
 </section>
 <!-- Poster -->
 <section id="poster" class="hero">
-  <video autoplay muted loop playsinline>
-    <source src="https://drive.google.com/uc?export=download&id=1Y86W-BvZPko6hoy9tiC7KAyK_Z4Ig08o" type="video/mp4">
-    <source src="https://drive.google.com/uc?export=download&id=1i9CkhT2p3CRrjR-EC2Mj51xpxSzMzuLq" type="video/mp4">
-    당신의 브라우저는 비디오 태그를 지원하지 않습니다.
-  </video>
+  <!-- 첫 번째 영상 -->
+  <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;margin-bottom:30px;">
+    <iframe 
+      src="https://drive.google.com/file/d/1Y86W-BvZPko6hoy9tiC7KAyK_Z4Ig08o/preview"
+      allow="autoplay"
+      frameborder="0"
+      style="position:absolute;inset:0;width:100%;height:100%;border:0;">
+    </iframe>
+  </div>
+
+  <!-- 두 번째 영상 -->
+  <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;">
+    <iframe 
+      src="https://drive.google.com/file/d/1i9CkhT2p3CRrjR-EC2Mj51xpxSzMzuLq/preview"
+      allow="autoplay"
+      frameborder="0"
+      style="position:absolute;inset:0;width:100%;height:100%;border:0;">
+    </iframe>
+  </div>
 </section>
+
 
 <!-- Program -->
 <section class="bg-black py-20 border-t border-white/10" id="program">
