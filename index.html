@@ -440,35 +440,77 @@
 .overlay-close:hover{ background:rgba(0,0,0,.65); transform:scale(1.05); }
 .overlay-close:focus{ outline:2px solid #fff3; outline-offset:2px; }
 
-.info-block {
+.info-section {
   width: min(900px, 92%);
-  margin: 36px auto 14px;
+  margin: 24px auto;
+  padding: 24px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(4px);
   text-align: left;
-}
-.info-block h3 {
-  font-size: 1.25rem;
-  margin: 0 0 10px;
-  color: var(--lavender); /* PANTONE 15-3919 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
 
-.btn-parking{
+.info-section h3 {
+  font-size: 1.2rem;
+  margin: 0 0 10px;
+  color: var(--lavender); /* 팬톤 15-3919 */
+}
+
+.info-section p {
+  color: #ddd;
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+/* 버튼 세 개 한 줄로 균등 정렬 */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+/* 공통 버튼 */
+.btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  justify-content: center;
+  gap: 6px;
+  min-width: 210px; /* 버튼 폭 통일 */
+  padding: 12px 18px;
   border-radius: 10px;
-  background: var(--emerald);       /* PANTONE 17-5641 */
-  color: #fff;
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 700;
-  border: 1px solid transparent;
-  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  border: none;
+  color: #fff;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
-.btn-parking:hover{
+
+/* 각 버튼 색상 */
+.btn-parking {
+  background: var(--emerald); /* 팬톤 17-5641 */
+}
+.btn-parking:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,148,115,.28);
+  box-shadow: 0 6px 15px rgba(0,148,115,0.3);
   background: #00b38f;
 }
+
+.btn-map {
+  background: var(--lavender);
+}
+.btn-map:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(143,148,204,0.3);
+  background: #9aa0d9;
+}
+
+/* 반응형 줄바꿈 */
+@media (max-width: 640px) {
+  .btn { min-width: 100%; }
+}
+
    
   </style>
 </link></meta></meta></meta></head>
@@ -817,27 +859,30 @@
 <svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M3 19v-6l3-4h12l3 4v6"></path><circle cx="7.5" cy="19" r="1.5"></circle><circle cx="16.5" cy="19" r="1.5"></circle><path d="M7 7h5a3 3 0 0 1 0 6H7z"></path></svg>
 </div>
 <section class="info-section">
-  <h3>오시는 길 · 주차 안내</h3>
-  <p>예술의전당 주차 요금, 위치, 할인 혜택 등의 자세한 내용은 아래 버튼에서 확인하세요.</p>
+  <h3>🚗 오시는 길 · 주차 안내</h3>
+  <p>예술의전당 주차 요금, 위치, 할인 혜택 등 자세한 내용은 아래 버튼에서 확인하세요.</p>
 
   <div class="btn-group">
-    <a class="btn-parking"
+    <a class="btn btn-parking"
        href="https://www.sac.or.kr/site/main/welcome/welcome#n"
        target="_blank" rel="noopener">
        🅿 예술의전당 안내 페이지
     </a>
-    <a class="btn-map"
+
+    <a class="btn btn-map"
        href="https://map.naver.com/p/entry/place/11505672?c=15,0,0,0,dh"
        target="_blank" rel="noopener">
        📍 네이버 지도 열기
     </a>
-    <a class="btn-map"
+
+    <a class="btn btn-map"
        href="https://www.google.com/maps/place/Seoul+Arts+Center/"
        target="_blank" rel="noopener">
        🌐 Google 지도 열기
     </a>
   </div>
 </section>
+
 
 </section>
 
