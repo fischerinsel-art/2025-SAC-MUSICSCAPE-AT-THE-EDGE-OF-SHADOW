@@ -503,7 +503,7 @@
 </section>
 <!-- Poster -->
 <section id="poster" class="hero">
-  <div class="poster-container">
+  <div class="poster-wrapper">
     <img 
       src="images/poster.webp" 
       alt="Musicscape – At the Edge of Shadow 포스터" 
@@ -512,19 +512,20 @@
 </section>
 
 <style>
-.poster-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+.poster-wrapper {
+  max-width: 1200px;   /* statement 섹션과 동일한 폭 */
+  margin: 0 auto;      /* 가운데 정렬 */
+  padding: 0 20px;     /* 좌우 여백 */
 }
+
 .poster-image {
-  width: 100%;
-  height: auto;
+  width: 100%;         /* wrapper 안에서 가로 전체 */
+  height: auto;        /* 세로 자동 비율 유지 */
   display: block;
   object-fit: cover;
+  border-radius: 8px;  /* statement 이미지와 통일감 줄 때 사용 */
 }
 </style>
-
 
 
 
