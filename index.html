@@ -411,6 +411,11 @@
   background: rgba(0, 0, 0, 0.6);
   transform: scale(1.05);
 }
+.poster-video {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 
 
 /* 데스크톱 hover & JS로 여는 상태 둘 다 지원 */
@@ -502,10 +507,12 @@
 </div>
 </section>
 <!-- Poster -->
-<section class="bg-black py-8 border-t border-white/10" id="poster">
-<div class="container mx-auto px-6 max-w-3xl">
-<picture><source srcset="images/poster.webp" type="image/webp"/><img alt="공연 포스터" class="w-full rounded-xl border border-white/10 shadow-lg" src="images/poster.jpg"/></picture>
-</div>
+<section id="poster" class="hero">
+  <video autoplay muted loop playsinline class="poster-video">
+    <source src="videos/poster1.mp4" type="video/mp4">
+    <source src="videos/poster2.mp4" type="video/mp4">
+    당신의 브라우저는 비디오 태그를 지원하지 않습니다.
+  </video>
 </section>
 <!-- Program -->
 <section class="bg-black py-20 border-t border-white/10" id="program">
