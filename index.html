@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FISCHERINSEL ART | Coming Soon</title>
+<style>
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background-color:#000;
+  color:#fff;
+  text-align:center;
+}
+.logo {width:180px;margin:60px auto 20px;display:block;}
+h1 {font-size:1.8rem;letter-spacing:1px;margin-bottom:10px;}
+p {color:#ccc;margin-bottom:30px;}
+.video-wrapper{position:relative;width:90%;max-width:720px;margin:0 auto 40px;aspect-ratio:16/9;overflow:hidden;border-radius:12px;}
+.video-wrapper iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.map-cta {width:min(980px,92%);margin:40px auto;}
+.map-cta-inner{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.btn-map{min-width:210px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 16px;border-radius:10px;font-weight:700;color:#fff;text-decoration:none;}
+.btn-map.naver{background:#A7ADC6;}
+.btn-map.naver:hover{background:#9aa0d9;box-shadow:0 6px 15px rgba(143,148,204,0.3);}
+.btn-map.google{background:#4b69ff;}
+.btn-map.google:hover{background:#5e7aff;box-shadow:0 6px 15px rgba(94,122,255,0.32);}
+@media (max-width:640px){.btn-map{width:100%;min-width:0;}}
+footer{margin-top:60px;color:#888;font-size:0.9rem;padding-bottom:40px;}
+</style>
+</head>
+<body>
+<img src="fischerinsel_logo.png" alt="Fischerinsel Art Logo" class="logo">
+<h1>FISCHERINSEL ART</h1>
+<p>Coming Soon – Stay tuned for our new performances and digital art experiences.</p>
+
+<div class="video-wrapper">
+  <iframe
+    src="https://www.youtube.com/embed/NuH7G7gzG8g?autoplay=1&mute=1&controls=0&loop=1&playlist=NuH7G7gzG8g&playsinline=1&modestbranding=1&rel=0"
+    title="YouTube video"
+    allow="autoplay; encrypted-media; picture-in-picture"
+    allowfullscreen></iframe>
+</div>
+
+<section class="map-cta">
+  <div class="map-cta-inner">
+    <a class="btn-map naver"
+       href="https://map.naver.com/p/entry/place/11505672?c=15,0,0,0,dh"
+       target="_blank" rel="noopener">📍 네이버 지도 열기</a>
+    <a class="btn-map google"
+       href="https://www.google.com/maps/place/Seoul+Arts+Center/"
+       target="_blank" rel="noopener">🌐 Google 지도 열기</a>
+  </div>
+</section>
+
+<footer>© 2025 Fischerinsel Art. All rights reserved.</footer>
+</body>
+</html>
