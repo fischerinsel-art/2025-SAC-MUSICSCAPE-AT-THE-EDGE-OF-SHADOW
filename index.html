@@ -527,34 +527,65 @@
 <meta name="twitter:image" content="https://2025sac.musicscape.fischerinsel-art.com/images/og_sac.jpg">
 
    
-  /* ===== Venue grid & CTA (added) ===== */
+/* ===== Venue 공통 ===== */
 .venue { width: min(980px, 92%); margin: 28px auto 18px; }
 .venue-title { font-size: 1.4rem; margin: 0 0 6px; color: var(--lavender); }
 .venue-sub { color: #cfcfcf; margin: 0 0 16px; line-height: 1.6; }
 
-.venue-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
-@media (min-width: 800px){ .venue-grid{ grid-template-columns:1fr 1fr; } }
-@media (min-width: 1100px){ .venue-grid{ grid-template-columns:1fr 1fr 1fr; } }
+.venue-grid {
+  display: grid;
+  grid-template-columns: 1fr;         /* 모바일: 1열 */
+  gap: 16px;
+}
+@media (min-width: 800px) {
+  .venue-grid { grid-template-columns: 1fr 1fr; } /* 태블릿/PC: 2열 */
+}
+@media (min-width: 1100px) {
+  .venue-grid { grid-template-columns: 1fr 1fr 1fr; } /* 큰 PC: 3열 */
+}
 
-.v-block{ display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:flex-start;
-  border:1px solid rgba(255,255,255,.08); border-radius:16px; background:rgba(255,255,255,.02); padding:16px; }
-.v-icon{ width:36px; height:36px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; }
-.v-title{ font-weight:700; margin-bottom:6px; }
-.v-ul{ margin:0; padding-left:16px; }
-.v-ul li{ margin:6px 0; }
-.info-text{ color:#ddd; margin:0 0 12px; line-height:1.6; }
+.info-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  text-align: left;                   /* 왼쪽 정렬 통일 */
+}
+.info-head { font-weight: 700; margin-bottom: 10px; color: #fff; }
+.info-list { margin: 0; padding-left: 18px; color: #ddd; line-height: 1.6; }
+.info-list li { margin: 4px 0; }
+.info-text { color: #ddd; margin: 0 0 12px; line-height: 1.6; }
 
+/* 버튼 공통 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 11px 16px; border-radius: 10px; text-decoration: none;
+  font-weight: 700; color: #fff; border: 0; transition: transform .15s, box-shadow .2s, background .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+
+/* 주차 안내 버튼 (팬톤 Emerald) */
+.btn-parking { background: var(--emerald); }
+.btn-parking:hover { background: #00b38f; box-shadow: 0 8px 20px rgba(0,148,115,.28); }
+
+/* 하단 지도 CTA */
 .map-cta { width: min(980px, 92%); margin: 18px auto 28px; }
-.map-cta-inner { display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-start; }
-.btn-map { min-width:210px; }
-.btn-map.naver{ background: var(--lavender); }
-.btn-map.naver:hover{ background:#9aa0d9; box-shadow:0 6px 15px rgba(143,148,204,0.3); }
-.btn-map.google{ background:#4b69ff; }
-.btn-map.google:hover{ background:#5e7aff; box-shadow:0 6px 15px rgba(94,122,255,0.32); }
-@media (max-width:640px){ .btn-map, .btn-parking{ width:100%; min-width:0; } }
-</style>
-</link></meta></meta></meta></head>
-<body>
+.map-cta-inner {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  justify-content: flex-start;       /* 왼쪽 정렬 (Venue 라인과 맞춤) */
+}
+.btn-map { min-width: 210px; }
+.btn-map.naver { background: var(--lavender); }  /* 팬톤 Lavender */
+.btn-map.naver:hover { background: #9aa0d9; box-shadow: 0 6px 15px rgba(143,148,204,0.3); }
+.btn-map.google { background: #4b69ff; }         /* 구글 버튼은 시각 구분 */
+.btn-map.google:hover { background: #5e7aff; box-shadow: 0 6px 15px rgba(94,122,255,0.32); }
+
+/* 모바일에서 버튼 전체폭 사용 */
+@media (max-width: 640px) {
+  .btn-map, .btn-parking { width: 100%; min-width: 0; }
+}
+
 <!-- Slide-out Menu -->
 <aside aria-hidden="true" class="menu-panel" id="sideMenu">
 <div class="p-4 border-b border-white/10 flex items-center justify-between">
@@ -856,78 +887,73 @@
 </div>
 </section>
 <!-- Venue -->
-<section class="bg-black py-16 border-t border-white/10" id="venue">
-<div class="container mx-auto px-6">
-<div class="eyebrow mb-2">Venue</div>
-<h3 class="text-[30px] md:text-[36px] font-semibold mb-3">예술의 전당 자유소극장</h3>
-<p class="soft">서울특별시 서초구 남부순환로 2406</p>
-<p class="soft mb-4">대표전화 02-1668-1352</p>
-<div class="grid gap-6">
-<div class="v-block">
-<div class="v-icon">
-<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><rect height="14" rx="3" width="16" x="4" y="3"></rect><circle cx="8.5" cy="16.5" r="1.5"></circle><circle cx="15.5" cy="16.5" r="1.5"></circle><path d="M6 20h12"></path></svg>
-</div>
-<div>
-<div class="v-title">지하철 이용</div>
-<ul class="v-ul soft text-sm">
-<li>3호선 남부터미널역 5번출구</li>
-<li> 1) 도보이동 (약5~10분 소요)</li>
-<li> 2) 마을버스 22번(초록색)을 타고 두 정거장 이동</li>
-<li>2호선 서초역 3번출구</li>
-<li> 1) 마을버스 11번(초록색)을 타고 네 정거장 이동</li>
-<li>4호선 사당역 1번출구</li>
-<li> 1) 마을버스 17번(초록색)을 타고 16개 정거장 이동</li>
-</ul>
-</div>
-</div>
-<div class="v-block">
-<div class="v-icon">
-<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><rect height="13" rx="3" width="18" x="3" y="4"></rect><circle cx="7" cy="18" r="1.5"></circle><circle cx="17" cy="18" r="1.5"></circle></svg>
-</div>
-<div>
-<div class="v-title">버스 이용</div>
-<ul class="v-ul soft text-sm">
-<li>간선 406,405 </li>
-<li>지선 5413 </li>
-<li>직행 1500-2, 1553 </li>
-<li>마을 서초11, 서초17, 서초22 </li>
-</ul>
-</div>
-</div>
-<div class="v-block">
-<div class="v-icon">
-<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M3 19v-6l3-4h12l3 4v6"></path><circle cx="7.5" cy="19" r="1.5"></circle><circle cx="16.5" cy="19" r="1.5"></circle><path d="M7 7h5a3 3 0 0 1 0 6H7z"></path></svg>
-</div>
-<div class="v-block">
-  <div class="v-icon">
-    <svg fill="none" height="22" stroke="#000" stroke-width="2" viewBox="0 0 24 24" width="22">
-      <path d="M3 19v-6l3-4h12l3 4v6"></path>
-      <circle cx="7.5" cy="19" r="1.5"></circle>
-      <circle cx="16.5" cy="19" r="1.5"></circle>
-      <path d="M7 7h5a3 3 0 0 1 0 6H7z"></path>
-    </svg>
+<section id="venue" class="venue">
+  <h2 class="venue-title">VENUE</h2>
+  <p class="venue-sub">예술의전당 자유소극장 · 서울 서초구 남부순환로 2406 · 02-1668-1352</p>
+
+  <div class="venue-grid">
+    <!-- 지하철 -->
+    <article class="info-card">
+      <div class="info-head">🚇 지하철 이용</div>
+      <ul class="info-list">
+        <li>3호선 남부터미널역 5번출구 → 도보 이동 (약 5~10분)</li>
+        <li>마을버스 22번(초록색) 환승 후 2개 정거장</li>
+        <li>2호선 서초역 3번출구 → 마을버스 11번(초록색) 환승 4개 정거장</li>
+        <li>4호선 사당역 1번출구 → 마을버스 17번(초록색) 환승 16개 정거장</li>
+      </ul>
+    </article>
+
+    <!-- 버스 -->
+    <article class="info-card">
+      <div class="info-head">🚌 버스 이용</div>
+      <ul class="info-list">
+        <li>간선: 406, 405</li>
+        <li>지선: 5413</li>
+        <li>직행: 1500-2, 1553</li>
+        <li>마을: 서초11, 서초17, 서초22</li>
+      </ul>
+    </article>
+
+    <!-- 오시는 길 / 주차 (※ 지도 버튼 제거 버전) -->
+    <article class="info-card">
+      <div class="info-head">🚗 주차 안내</div>
+      <p class="info-text">
+        예술의전당 주차 요금, 위치, 할인 혜택 등 자세한 내용은 아래 안내 페이지에서 확인하세요.
+      </p>
+      <a class="btn btn-parking"
+         href="https://www.sac.or.kr/site/main/welcome/welcome#n"
+         target="_blank" rel="noopener">
+        🅿 예술의전당 안내 페이지
+      </a>
+      <!-- ⬆️ 여기엔 '네이버/구글 지도 열기' 버튼 넣지 않습니다(중복 방지). -->
+    </article>
   </div>
-  <div>
-    <div class="v-title">오시는 길 · 주차 안내</div>
-    <p class="soft text-sm">예술의전당 주차 요금, 위치, 할인 혜택 등 자세한 안내는 아래 버튼에서 확인하세요.</p>
-    <a class="btn btn-parking"
-       href="https://www.sac.or.kr/site/main/welcome/welcome#n"
-       target="_blank" rel="noopener">
-       🅿 예술의전당 안내 페이지
+</section>
+
+
+
+</div>
+</div>
+</div>
+</div>
+</section>
+   <section class="map-cta">
+  <div class="map-cta-inner">
+    <a class="btn btn-map naver"
+       href="https://map.naver.com/p/entry/place/11505672?c=15,0,0,0,dh"
+       target="_blank" rel="noopener"
+       aria-label="네이버지도에서 예술의전당 바로 열기">
+      📍 네이버 지도 열기
+    </a>
+    <a class="btn btn-map google"
+       href="https://www.google.com/maps/place/Seoul+Arts+Center/"
+       target="_blank" rel="noopener"
+       aria-label="Google 지도에서 예술의전당 바로 열기">
+      🌐 Google 지도 열기
     </a>
   </div>
-</div>
-
-
-
 </section>
 
-
-</div>
-</div>
-</div>
-</div>
-</section>
 <!-- Footer -->
 <footer class="text-white/80 text-sm py-10 text-center border-t border-white/10">
 <div class="container mx-auto px-6 flex flex-col items-center gap-4">
