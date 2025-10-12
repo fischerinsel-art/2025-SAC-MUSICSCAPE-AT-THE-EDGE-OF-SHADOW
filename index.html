@@ -528,6 +528,23 @@
 <meta name="twitter:title" content="Musicscape — At the Edge of Shadow">
 <meta name="twitter:description" content="빛과 어둠의 경계를 넘나드는 미디어 퍼포먼스">
 <meta name="twitter:image" content="https://2025sac.musicscape.fischerinsel-art.com/images/og_sac.jpg">
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  margin-top: 60px;
+}
+
+.footer-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  color: #cccccc;
+}
 
    
   </style>
@@ -878,24 +895,30 @@
 </div>
 </div>
 <div class="v-block">
-<div class="v-icon">
-<svg fill="none" height="22" stroke="#000" stroke-width="2" viewbox="0 0 24 24" width="22"><rect height="13" rx="3" width="18" x="3" y="4"></rect><circle cx="7" cy="18" r="1.5"></circle><circle cx="17" cy="18" r="1.5"></circle></svg>
-</div>
-<div>
-<div class="v-title">주차안내</div>
-<ul class="v-ul soft text-sm">
-<li>예술의전당 주차 요금, 위치, 할인 혜택 등 자세한 내용은 아래 버튼에서 확인하세요. </li>
-</div>
-
-  <div class="btn-group">
-<a class="btn btn-parking no-wrap"
-   href="https://www.sac.or.kr/site/main/welcome/welcome#n"
-   target="_blank" rel="noopener">
-   🅿 예술의전당 안내사이트 바로가기
-</a>
-
-   
+  <div class="v-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
+      <rect x="3" y="4" width="18" height="13" rx="3"></rect>
+      <path d="M3 19v-6l3-4h12l3 4v6"></path>
+      <circle cx="7" cy="18" r="1.5"></circle>
+      <circle cx="17" cy="18" r="1.5"></circle>
+    </svg>
   </div>
+  <div>
+    <div class="v-title">주차안내</div>
+    <ul class="v-ul soft text-sm">
+      <li>예술의전당 주차 요금, 위치, 할인 혜택 등 자세한 내용은 아래 버튼에서 확인하세요.</li>
+    </ul>
+
+    <div class="btn-group">
+      <a class="btn btn-parking no-wrap"
+         href="https://www.sac.or.kr/site/main/welcome/welcome#n"
+         target="_blank" rel="noopener">
+         🅿 예술의전당 안내사이트 바로가기
+      </a>
+    </div>
+  </div>
+</div>
+
 </section>
 
 
@@ -912,11 +935,19 @@
 <section class="map-cta">
   <div class="container mx-auto px-6 mt-6">
     <div class="flex flex-wrap gap-3">
-      <a class="btn3d" href="https://map.naver.com/p/entry/place/11505672?c=15,0,0,0,dh" target="_blank" rel="noopener">📍 네이버 지도 열기</a>
-      <a class="btn3d" href="https://www.google.com/maps/place/Seoul+Arts+Center/" target="_blank" rel="noopener">🌐 Google 지도 열기</a>
+      <!-- 네이버: place 고정 ID로 바로 진입 -->
+      <a class="btn3d"
+         href="https://map.naver.com/p/entry/place/11505672"
+         target="_blank" rel="noopener">📍 네이버 지도 열기</a>
+
+      <!-- 구글: API 공식 포맷의 검색 URL -->
+      <a class="btn3d"
+         href="https://www.google.com/maps/search/?api=1&query=%EC%98%88%EC%88%A0%EC%9D%98%EC%A0%84%EB%8B%B9%20%EC%9E%90%EC%9C%A0%EC%86%8C%EA%B7%B9%EC%9E%A5"
+         target="_blank" rel="noopener">🌐 Google 지도 열기</a>
     </div>
   </div>
 </section>
+
 
 <!-- Footer -->
 <footer class="text-white/80 text-sm py-10 text-center border-t border-white/10">
@@ -944,6 +975,17 @@
 <div class="mt-2 text-xs">© 2025 FISCHERINSEL ARTS. All rights reserved.</div>
 </div>
 </div>
+   <footer class="footer">
+  <div class="container mx-auto px-6 py-8 text-center text-sm text-gray-400">
+    <p>© 2025 Fischerinsel Art Planning. All rights reserved.</p>
+    <p>
+      <a href="https://www.fischerinsel-art.com" target="_blank" rel="noopener" class="footer-link">
+        🌐 www.fischerinsel-art.com
+      </a>
+    </p>
+  </div>
+</footer>
+
 </footer>
 <script>
     // Slide menu logic
