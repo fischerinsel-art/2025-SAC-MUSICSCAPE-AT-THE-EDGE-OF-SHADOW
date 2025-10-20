@@ -1331,6 +1331,32 @@ card.addEventListener('mouseleave', () => {
     });
   })();
 </script>
+<script>
+(function(){
+  var APPNAME = "2025sac.musicscape.fischerinsel-art.com";
+  var NAME = encodeURIComponent("예술의전당 자유소극장");
+  var LAT = 37.47383, LNG = 127.00667;
+
+  var webUrl   = "https://map.naver.com/p/search/" + NAME; // PC/웹 fallback
+  var nmapUrl  = "nmap://place?lat=" + LAT + "&lng=" + LNG + "&name=" + NAME + "&appname=" + APPNAME;
+  var intentUrl= "intent://place?lat=" + LAT + "&lng=" + LNG + "&name=" + NAME + "&appname=" + APPNAME + "#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end";
+
+  function isAndroid(){ return /Android/i.test(navigator.userAgent); }
+  function isIOS(){ return /iPhone|iPad|iPod/i.test(navigator.userAgent); }
+
+  // 페이지 내 네이버 지도 링크들(텍스트/아이콘 모두 커버)
+  document.querySelectorAll('a[href*="naver"], a[data-map="naver"], a.naver-map, a[href*="네이버지도"], a[href*="네이버 지도"]').forEach(function(a){
+    if (isAndroid()){
+      a.href = intentUrl;   // 앱 우선 + 미설치시 설치 유도
+    } else if (isIOS()){
+      a.href = nmapUrl;     // 앱 스킴
+    } else {
+      a.href = webUrl;      // PC 등은 웹 지도로
+      a.target = "_blank"; a.rel = "noopener";
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
