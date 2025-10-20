@@ -1290,6 +1290,31 @@ card.addEventListener('mouseleave', () => {
   new MutationObserver(attachSpeakerUnderNavTicket)
     .observe(document.documentElement,{childList:true,subtree:true});
 </script>
+<script>
+  // Statement(그리고 페이지 전체)의 .reveal-line을 보이게
+  document.addEventListener('DOMContentLoaded', () => {
+    // 처음 보이는 요소는 즉시 show
+    const els = document.querySelectorAll('.reveal-line');
+    // 뷰포트 진입 시 show를 붙이는 옵저버
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('show');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    els.forEach(el => {
+      // 첫 화면에서 이미 보이는 경우 대비
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+        el.classList.add('show');
+      } else {
+        io.observe(el);
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
