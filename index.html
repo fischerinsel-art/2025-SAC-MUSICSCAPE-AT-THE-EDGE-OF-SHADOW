@@ -116,7 +116,7 @@
 <script>
   // DOM 준비되면 인터파크 예매 링크에 이벤트 바인딩
   document.addEventListener('DOMContentLoaded', function(){
-    const sel = 'a[href*="interpark.com/goods/25013136"]';
+    const sel = 'a[href*="https://www.sac.or.kr/site/main/show/show_view?SN=74372"]';
     document.querySelectorAll(sel).forEach(a => {
       a.addEventListener('click', () => {
         const section = a.closest('section')?.id || 'nav';
@@ -191,7 +191,7 @@
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide",
+    "url": "https://www.sac.or.kr/site/main/show/show_view?SN=74372",
     "price": "30000",
     "priceCurrency": "KRW",
     "availability": "https://schema.org/InStock",
@@ -588,7 +588,9 @@
 <span class="block text-[12px] md:text-[12px] title-top uppercase">MUSICSCAPE</span>
 <span class="block text-[12px] md:text-[12px] title-bottom uppercase">AT THE EDGE OF SHADOW</span>
 </a>
-<a class="btn3d" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide">예매</a>
+<a class="btn" href="https://www.sac.or.kr/site/main/show/show_view?SN=74372"
+   target="_blank" rel="noopener">예매하기</a>
+
 </div>
 </nav>
 <!-- Hero -->
