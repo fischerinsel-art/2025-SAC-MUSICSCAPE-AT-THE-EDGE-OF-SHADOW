@@ -592,6 +592,17 @@
   </iframe>
 </div>
 <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/60"></div>
+   <!-- 🔊 스피커 버튼 -->
+<button id="speakerBtn" aria-label="스피커 켜기"
+  style="position:absolute;right:20px;bottom:20px;z-index:10;
+         width:52px;height:52px;border-radius:50%;
+         display:flex;align-items:center;justify-content:center;
+         background:rgba(0,0,0,.5);color:#fff;font-size:22px;
+         border:1px solid rgba(255,255,255,.25);
+         box-shadow:0 8px 24px rgba(0,0,0,.35);cursor:pointer;">
+  🔊
+</button>
+
 </header>
 <!-- Statement (4:3 프레임 슬라이드 + 아래 텍스트) -->
 <section class="py-14 border-t border-white/10" id="feature">
@@ -948,6 +959,57 @@
   </div>
 </section>
 
+<script>
+  let player;
+  let isMuted = true;
+
+  // YouTube IFrame API 로드
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  // API가 준비되면 실행
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player(document.querySelector('iframe'), {
+      events: {
+        onReady: (e) => {
+          e.target.mute(); // 초기에는 음소거
+          e.target.playVideo();
+        }
+      }
+    });
+  }
+
+  // 버튼 클릭 시 음소거 토글
+  document.getElementById('speakerBtn').addEventListener('click', function() {
+    if (!player) return;
+    if (isMuted) {
+      player.unMute();
+      this.textContent = '🔈';
+      this.setAttribute('aria-label','스피커 끄기');
+      isMuted = false;
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'sound_toggle', {
+          event_category: 'interaction',
+          event_label: 'sound_on'
+        });
+      }
+    } else {
+      player.mute();
+      this.textContent = '🔊';
+      this.setAttribute('aria-label','스피커 켜기');
+      isMuted = true;
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'sound_toggle', {
+          event_category: 'interaction',
+          event_label: 'sound_off'
+        });
+      }
+    }
+  });
+</script>
 
 <!-- Footer -->
 <footer class="text-white/80 text-sm py-10 text-center border-t border-white/10">
