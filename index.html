@@ -168,7 +168,7 @@
     "name": "예술의 전당 자유소극장",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "서울특별시 서초구,
+      "addressLocality": "서울특별시 서초구",
       "streetAddress": "남부순환로 2406",
       "addressCountry": "KR"
     }
@@ -577,7 +577,7 @@
 <a class="menu-link" href="#team">Creative Team</a>
 <a class="menu-link" href="#tickets">Discount Information</a>
 <a class="menu-link" href="#venue">Venue</a>
-<a class="menu-link" href="https://mobileticket.interpark.com/goods/25013136?app_tapbar_state=hide" target="_blank">예매하기 →</a>
+<a id="navTicketBtn" class="btn3d" href="https://www.sac.or.kr/site/main/show/show_view?SN=74372">예매</a>
 </nav>
 </aside>
 <!-- Top nav -->
@@ -595,7 +595,7 @@
 <header class="relative w-full h-[70vh] md:h-screen overflow-hidden" id="top">
 <div class="absolute top-0 left-0 w-full h-full">
   <iframe
-    src="https://www.youtube.com/embed/NuH7G7gzG8g?autoplay=1&mute=1&controls=0&loop=1&playlist=NuH7G7gzG8g&playsinline=1&modestbranding=1&rel=0"
+    src="https://www.youtube.com/embed/NuH7G7gzG8g?autoplay=1&mute=1&controls=0&loop=1&playlist=NuH7G7gzG8g&playsinline=1&modestbranding=1&rel=0&enablejsapi=1"
     title="YouTube video"
     allow="autoplay; encrypted-media; picture-in-picture"
     allowfullscreen
@@ -604,16 +604,7 @@
   </iframe>
 </div>
 <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/60"></div>
-   <!-- 🔊 스피커 버튼 -->
-<button id="speakerBtn" aria-label="스피커 켜기"
-  style="position:absolute;right:20px;bottom:20px;z-index:10;
-         width:52px;height:52px;border-radius:50%;
-         display:flex;align-items:center;justify-content:center;
-         background:rgba(0,0,0,.5);color:#fff;font-size:22px;
-         border:1px solid rgba(255,255,255,.25);
-         box-shadow:0 8px 24px rgba(0,0,0,.35);cursor:pointer;">
-  🔊
-</button>
+ 
 
 </header>
 <!-- Statement (4:3 프레임 슬라이드 + 아래 텍스트) -->
@@ -1058,78 +1049,6 @@
     </p>
   </div>
 </footer>
-<script>
-  // ---- YouTube IFrame API 보장 ----
-  (function ensureYouTubeAPI(){
-    if (window.YT && window.YT.Player) return;
-    const s = document.createElement('script');
-    s.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(s);
-  })();
-
-  let player, ytReady = false, isMuted = true;
-
-  // API 준비되면 히어로 섹션의 iframe로 플레이어 생성
-  window.onYouTubeIframeAPIReady = function () {
-    ytReady = true;
-    const heroIframe = document.querySelector('#top iframe'); // 히어로 섹션 안의 유튜브
-    if (!heroIframe) return;
-
-    // 이미 다른 코드에서 new YT.Player(...)를 했어도 문제 없음(중복만 피하면 OK)
-    try {
-      player = new YT.Player(heroIframe, {
-        events: {
-          onReady: (e) => { try { e.target.mute(); e.target.playVideo(); } catch(_){} }
-        }
-      });
-    } catch(_) {}
-  };
-
-  // 상단 메뉴의 예매 버튼 아래에 스피커 토글 생성
-  function attachSpeakerUnderNavTicket(){
-    const ticket = document.getElementById('navTicketBtn');
-    if (!ticket) return;                       // 상단 예매 버튼이 아직 없으면 패스
-    if (document.getElementById('speakerNavBtn')) return; // 중복 생성 방지
-
-    const btn = document.createElement('button');
-    btn.id = 'speakerNavBtn';
-    btn.type = 'button';
-    btn.className = 'fi-speaker-navbtn';
-    btn.setAttribute('aria-label','사운드 켜기');
-    btn.innerHTML = '<span class="fi-ico">🔊</span><span>사운드</span>';
-
-    ticket.insertAdjacentElement('afterend', btn);
-
-    btn.addEventListener('click', () => {
-      // 플레이어 준비 이전에도 유저 제스처가 있으면 이후 언뮤트/재생 성공 가능
-      try {
-        if (player && ytReady) {
-          if (isMuted) { player.unMute(); player.playVideo && player.playVideo(); }
-          else { player.mute(); }
-        }
-      } catch(_){}
-
-      isMuted = !isMuted;
-      btn.setAttribute('aria-label', isMuted ? '사운드 켜기' : '사운드 끄기');
-      btn.querySelector('.fi-ico').textContent = isMuted ? '🔊' : '🔈';
-
-      // GA4 이벤트 (설치되어 있을 때만 전송)
-      if (typeof gtag === 'function') {
-        gtag('event', 'sound_toggle', {
-          event_category: 'interaction',
-          event_label: isMuted ? 'sound_off' : 'sound_on'
-        });
-      }
-    });
-  }
-
-  // DOM 준비되면 1회 삽입
-  document.addEventListener('DOMContentLoaded', attachSpeakerUnderNavTicket);
-
-  // SPA/동적 메뉴에 대비(선택): 메뉴가 늦게 렌더될 때도 붙도록
-  const mo = new MutationObserver(() => attachSpeakerUnderNavTicket());
-  mo.observe(document.documentElement, { childList:true, subtree:true });
-</script>
 
 </footer>
 <script>
@@ -1167,26 +1086,7 @@
       document.body.removeChild(ta);
     }
   </script>
-<script>
-  // IntersectionObserver로 줄별 순차 등장
-  (function(){
-    const lines = document.querySelectorAll('#feature .reveal-line');
-    if (!('IntersectionObserver' in window) || !lines.length){
-      // 폴백: 애니메이션 없이 표시
-      lines.forEach(el => el.classList.add('show'));
-      return;
-    }
-    const io = new IntersectionObserver((entries, obs)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          e.target.classList.add('show');
-          obs.unobserve(e.target); // 한 번만 실행
-        }
-      });
-    }, { threshold: 0.25 });
-    lines.forEach(el => io.observe(el));
-  })();
-</script>
+
 <!-- YouTube IFrame API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
