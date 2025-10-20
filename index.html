@@ -1209,6 +1209,87 @@ card.addEventListener('mouseleave', () => {
   new MutationObserver(attachSpeakerUnderNavTicket)
     .observe(document.documentElement,{childList:true,subtree:true});
 </script>
+<script>
+  // 1) YouTube IFrame API 보장 로드
+  (function ensureYouTubeAPI(){
+    if (!(window.YT && window.YT.Player)) {
+      var s = document.createElement('script');
+      s.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(s);
+    }
+  })();
+
+  let player, ytReady = false, isPlaying = false;
+
+  // 2) API 준비되면: 히어로 iframe으로 플레이어 생성 + 처음은 "정지/음소거" 상태
+  window.onYouTubeIframeAPIReady = function(){
+    ytReady = true;
+    try {
+      var heroIframe = document.querySelector('#top iframe');
+      if (heroIframe) {
+        player = new YT.Player(heroIframe, {
+          events:{
+            onReady: function(e){
+              try {
+                e.target.mute();
+                e.target.pauseVideo(); // 시작은 정지 상태
+                isPlaying = false;
+              } catch(_){}
+            }
+          }
+        });
+      }
+    } catch(_) {}
+  };
+
+  // 3) 상단 메뉴 예매 버튼 아래에 토글 생성
+  function attachSpeakerUnderNavTicket(){
+    var ticket = document.getElementById('navTicketBtn');
+    if (!ticket) return;
+    if (document.getElementById('speakerNavBtn')) return; // 중복 방지
+
+    var btn = document.createElement('button');
+    btn.id = 'speakerNavBtn';
+    btn.type = 'button';
+    btn.className = 'fi-speaker-navbtn';
+    btn.setAttribute('aria-label','음악 켜기');
+    btn.innerHTML = '<span class="fi-ico">▶️</span><span>음악</span>';
+    ticket.insertAdjacentElement('afterend', btn);
+
+    // 4) 클릭 시: 재생/일시정지 + 음소거/해제
+    btn.addEventListener('click', function(){
+      try {
+        if (player && ytReady){
+          if (!isPlaying){
+            player.unMute && player.unMute();
+            player.playVideo && player.playVideo();
+            isPlaying = true;
+          } else {
+            player.pauseVideo && player.pauseVideo();
+            player.mute && player.mute();
+            isPlaying = false;
+          }
+        }
+      } catch(_){}
+
+      btn.setAttribute('aria-label', isPlaying ? '음악 끄기' : '음악 켜기');
+      btn.querySelector('.fi-ico').textContent = isPlaying ? '⏸' : '▶️';
+
+      // (선택) GA4 이벤트
+      if (typeof gtag === 'function') {
+        gtag('event','sound_toggle',{
+          event_category:'interaction',
+          event_label: isPlaying ? 'play' : 'pause'
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', attachSpeakerUnderNavTicket);
+  // 메뉴가 늦게 렌더돼도 붙도록 보강
+  new MutationObserver(attachSpeakerUnderNavTicket)
+    .observe(document.documentElement,{childList:true,subtree:true});
+</script>
 
 </body>
 </html>
