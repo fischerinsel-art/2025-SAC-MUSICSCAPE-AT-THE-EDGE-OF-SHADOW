@@ -1315,6 +1315,22 @@ card.addEventListener('mouseleave', () => {
     });
   });
 </script>
+<script>
+  (function(){
+    var sac = "https://www.sac.or.kr/site/main/show/show_view?SN=74372";
+    // 1) 예전 interpark류 링크 전부 SAC로 변경
+    document.querySelectorAll('a[href*="interpark"]').forEach(function(a){
+      a.href = sac; a.target = "_blank"; a.rel = "noopener";
+    });
+    // 2) 혹시 텍스트만 "예매/예매하기"인데 링크가 다른 경우도 커버
+    document.querySelectorAll('a').forEach(function(a){
+      var t = (a.textContent||"").trim();
+      if ((t === "예매" || t === "예매하기") && !a.href.startsWith(sac)) {
+        a.href = sac; a.target = "_blank"; a.rel = "noopener";
+      }
+    });
+  })();
+</script>
 
 </body>
 </html>
