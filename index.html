@@ -596,14 +596,25 @@
 <!-- Hero -->
 <header class="relative w-full h-[70vh] md:h-screen overflow-hidden" id="top">
 <div class="absolute top-0 left-0 w-full h-full">
-<iframe
-  src="https://www.youtube.com/embed/0gAJl29lYyI?autoplay=1&mute=1&controls=0&loop=1&playlist=0gAJl29lYyI&playsinline=1&modestbranding=1&rel=0"
-  title="Promo"
-  allow="autoplay; encrypted-media; picture-in-picture"
-  allowfullscreen
-  frameborder="0"
-  style="position:absolute;inset:0;width:100%;height:100%;border:0;">
-</iframe>
+<div class="absolute top-0 left-0 w-full h-full">
+  <div id="heroPlayerWrap" style="position:absolute;inset:0;">
+    <iframe
+      id="heroPlayer"
+      src="https://www.youtube.com/embed/0gAJl29lYyI?autoplay=1&mute=1&controls=0&loop=1&playlist=0gAJl29lYyI&playsinline=1&modestbranding=1&rel=0&enablejsapi=1&origin=https://2025incheon.fischerinsel-art.com"
+      title="Promo"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      frameborder="0"
+      style="position:absolute;inset:0;width:100%;height:100%;border:0;">
+    </iframe>
+  </div>
+
+  <!-- 음소거 토글 버튼 (기존 버튼 자리에 사용) -->
+  <button id="muteToggle"
+          class="absolute z-10 bottom-4 right-4 rounded-full bg-white/10 backdrop-blur px-3 py-2 text-sm">
+    🔇 Sound Off
+  </button>
+</div>
 
 </div>
 <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/60"></div>
@@ -1357,6 +1368,48 @@ card.addEventListener('mouseleave', () => {
     }
   });
 })();
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  let ytPlayer;
+
+  // API 준비되면 호출됨
+  function onYouTubeIframeAPIReady(){
+    ytPlayer = new YT.Player('heroPlayer', {
+      events: { 'onReady': onPlayerReady }
+    });
+  }
+
+  function onPlayerReady(){
+    // 초기엔 자동재생을 위해 무음 상태(브라우저 정책)
+    const btn = document.getElementById('muteToggle');
+    updateBtn();
+
+    btn.addEventListener('click', () => {
+      if (!ytPlayer) return;
+
+      // 사용자 클릭 시 소리 켜기 + 재생 보장
+      if (ytPlayer.isMuted()) {
+        ytPlayer.unMute();
+        ytPlayer.setVolume(80);
+        if (ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
+          ytPlayer.playVideo();
+        }
+      } else {
+        ytPlayer.mute();
+      }
+      updateBtn();
+    });
+  }
+
+  function updateBtn(){
+    const btn = document.getElementById('muteToggle');
+    if (!ytPlayer || ytPlayer.isMuted()) {
+      btn.textContent = '🔇 Sound Off';
+    } else {
+      btn.textContent = '🔊 Sound On';
+    }
+  }
 </script>
 
 </body>
