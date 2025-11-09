@@ -1425,6 +1425,42 @@ function updateBtn(btn){
     }
   }
 </script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  let player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('heroPlayer', {
+      events: {
+        'onReady': onPlayerReady
+      }
+    });
+  }
+
+  function onPlayerReady() {
+    const btn = document.createElement('div');
+    btn.id = 'soundToggleBtn';
+    btn.innerHTML = '🔇';
+    btn.style.position = 'absolute';
+    btn.style.top = '20px';
+    btn.style.left = '20px';
+    btn.title = '소리 켜기/끄기';
+    btn.addEventListener('click', toggleSound);
+    document.getElementById('heroPlayerWrap').appendChild(btn);
+  }
+
+  function toggleSound() {
+    if (!player) return;
+    const btn = document.getElementById('soundToggleBtn');
+    const muted = player.isMuted();
+    if (muted) {
+      player.unMute();
+      btn.innerHTML = '🔊';
+    } else {
+      player.mute();
+      btn.innerHTML = '🔇';
+    }
+  }
+</script>
 
 </body>
 </html>
