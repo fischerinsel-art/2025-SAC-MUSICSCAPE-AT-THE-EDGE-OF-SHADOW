@@ -609,11 +609,7 @@
     </iframe>
   </div>
 
-  <!-- 음소거 토글 버튼 (기존 버튼 자리에 사용) -->
-  <button id="muteToggle"
-          class="absolute z-10 bottom-4 right-4 rounded-full bg-white/10 backdrop-blur px-3 py-2 text-sm">
-    🔇 Sound Off
-  </button>
+
 </div>
 
 </div>
@@ -1365,35 +1361,28 @@ card.addEventListener('mouseleave', () => {
     });
   }
 
-  function onPlayerReady(){
-    // 초기엔 자동재생을 위해 무음 상태(브라우저 정책)
-    const btn = document.getElementById('muteToggle');
-    updateBtn();
-
+ function onPlayerReady() {
+  const btn = document.getElementById('muteToggle'); // 없으면 null
+  if (btn) {                       // ✅ 버튼이 있을 때만 이벤트 연결
+    updateBtn(btn);
     btn.addEventListener('click', () => {
       if (!ytPlayer) return;
-
-      // 사용자 클릭 시 소리 켜기 + 재생 보장
       if (ytPlayer.isMuted()) {
         ytPlayer.unMute();
         ytPlayer.setVolume(80);
-        if (ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
-          ytPlayer.playVideo();
-        }
+        ytPlayer.playVideo();
       } else {
         ytPlayer.mute();
       }
-      updateBtn();
+      updateBtn(btn);
     });
   }
+}
 
-  function updateBtn(){
-    const btn = document.getElementById('muteToggle');
-    if (!ytPlayer || ytPlayer.isMuted()) {
-      btn.textContent = '🔇 Sound Off';
-    } else {
-      btn.textContent = '🔊 Sound On';
-    }
+function updateBtn(btn){
+  if (!btn) return;  // ✅ 버튼이 없으면 아무 것도 안 함
+  btn.textContent = (!ytPlayer || ytPlayer.isMuted()) ? '🔇 Sound Off' : '🔊 Sound On';
+}
   }
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
