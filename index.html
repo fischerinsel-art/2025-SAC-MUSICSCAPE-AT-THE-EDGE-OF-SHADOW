@@ -1143,34 +1143,33 @@ card.addEventListener('mouseleave', () => {
   });
 })();
 </script>
-   <script>
-  (function ensureYouTubeAPI(){
-    if (!(window.YT && window.YT.Player)) {
-      var s = document.createElement('script');
-      s.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(s);
-    }
-  })();
+<script>
+(function(){
+  // 1) YouTube IFrame API를 한 번만 로드
+  if (!(window.YT && window.YT.Player)) {
+    var s = document.createElement('script');
+    s.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(s);
+  }
 
-  let player, ytReady=false, isPlaying=false;
+  let player, ytReady = false, isPlaying = false;
 
-  // API 준비되면 히어로 iframe으로 플레이어 생성
+  // 2) API 준비되면: 히어로 iframe을 플레이어로 연결 (초기: 정지+음소거)
   window.onYouTubeIframeAPIReady = function(){
     ytReady = true;
     try {
-      var heroIframe = document.querySelector('#top iframe');
-      if (heroIframe) {
-        player = new YT.Player(heroIframe, {
-          events:{
-            onReady: function(e){
-              try { e.target.mute(); e.target.playVideo(); isPlaying=true; } catch(_){}
-            }
+      player = new YT.Player('heroPlayer', {
+        events: {
+          onReady: function(e){
+            try { e.target.mute(); e.target.pauseVideo(); isPlaying = false; } catch(_){}
+            attachSpeakerUnderNavTicket();
           }
-        });
-      }
+        }
+      });
     } catch(_) {}
   };
 
+  // 3) 상단 네비게이션의 예매 버튼 옆에 “음악” 토글 추가
   function attachSpeakerUnderNavTicket(){
     var ticket = document.getElementById('navTicketBtn');
     if (!ticket) return;
@@ -1185,119 +1184,32 @@ card.addEventListener('mouseleave', () => {
     ticket.insertAdjacentElement('afterend', btn);
 
     btn.addEventListener('click', function(){
-      try {
-        if (player && ytReady){
-          if (!isPlaying){
-            player.unMute && player.unMute();
-            player.playVideo && player.playVideo();
-            isPlaying = true;
-          } else {
-            player.pauseVideo && player.pauseVideo();
-            player.mute && player.mute();
-            isPlaying = false;
-          }
-        }
-      }catch(_){}
-
-      btn.setAttribute('aria-label', isPlaying ? '음악 끄기' : '음악 켜기');
-      btn.querySelector('.fi-ico').textContent = isPlaying ? '⏸' : '▶️';
-
-      // GA4 이벤트(있을 때만)
-      if (typeof gtag === 'function') {
-        gtag('event','sound_toggle',{
-          event_category:'interaction',
-          event_label: isPlaying ? 'play' : 'pause'
-        });
+      if (!(player && ytReady)) return;
+      if (!isPlaying){
+        player.unMute && player.unMute();
+        player.playVideo && player.playVideo();
+        isPlaying = true;
+        btn.setAttribute('aria-label','음악 끄기');
+        btn.querySelector('.fi-ico').textContent = '⏸';
+      } else {
+        player.pauseVideo && player.pauseVideo();
+        player.mute && player.mute();
+        isPlaying = false;
+        btn.setAttribute('aria-label','음악 켜기');
+        btn.querySelector('.fi-ico').textContent = '▶️';
       }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', attachSpeakerUnderNavTicket);
-  // 동적 렌더링에도 대응
-  new MutationObserver(attachSpeakerUnderNavTicket)
-    .observe(document.documentElement,{childList:true,subtree:true});
-</script>
-<script>
-  // 1) YouTube IFrame API 보장 로드
-  (function ensureYouTubeAPI(){
-    if (!(window.YT && window.YT.Player)) {
-      var s = document.createElement('script');
-      s.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(s);
-    }
-  })();
-
-  let player, ytReady = false, isPlaying = false;
-
-  // 2) API 준비되면: 히어로 iframe으로 플레이어 생성 + 처음은 "정지/음소거" 상태
-  window.onYouTubeIframeAPIReady = function(){
-    ytReady = true;
-    try {
-      var heroIframe = document.querySelector('#top iframe');
-      if (heroIframe) {
-        player = new YT.Player(heroIframe, {
-          events:{
-            onReady: function(e){
-              try {
-                e.target.mute();
-                e.target.pauseVideo(); // 시작은 정지 상태
-                isPlaying = false;
-              } catch(_){}
-            }
-          }
-        });
-      }
-    } catch(_) {}
-  };
-
-  // 3) 상단 메뉴 예매 버튼 아래에 토글 생성
-  function attachSpeakerUnderNavTicket(){
-    var ticket = document.getElementById('navTicketBtn');
-    if (!ticket) return;
-    if (document.getElementById('speakerNavBtn')) return; // 중복 방지
-
-    var btn = document.createElement('button');
-    btn.id = 'speakerNavBtn';
-    btn.type = 'button';
-    btn.className = 'fi-speaker-navbtn';
-    btn.setAttribute('aria-label','음악 켜기');
-    btn.innerHTML = '<span class="fi-ico">▶️</span><span>음악</span>';
-    ticket.insertAdjacentElement('afterend', btn);
-
-    // 4) 클릭 시: 재생/일시정지 + 음소거/해제
-    btn.addEventListener('click', function(){
-      try {
-        if (player && ytReady){
-          if (!isPlaying){
-            player.unMute && player.unMute();
-            player.playVideo && player.playVideo();
-            isPlaying = true;
-          } else {
-            player.pauseVideo && player.pauseVideo();
-            player.mute && player.mute();
-            isPlaying = false;
-          }
-        }
-      } catch(_){}
-
-      btn.setAttribute('aria-label', isPlaying ? '음악 끄기' : '음악 켜기');
-      btn.querySelector('.fi-ico').textContent = isPlaying ? '⏸' : '▶️';
-
       // (선택) GA4 이벤트
       if (typeof gtag === 'function') {
-        gtag('event','sound_toggle',{
-          event_category:'interaction',
-          event_label: isPlaying ? 'play' : 'pause'
-        });
+        gtag('event','sound_toggle',{event_category:'interaction',event_label:isPlaying?'play':'pause'});
       }
     });
   }
 
   document.addEventListener('DOMContentLoaded', attachSpeakerUnderNavTicket);
-  // 메뉴가 늦게 렌더돼도 붙도록 보강
-  new MutationObserver(attachSpeakerUnderNavTicket)
-    .observe(document.documentElement,{childList:true,subtree:true});
+  new MutationObserver(attachSpeakerUnderNavTicket).observe(document.documentElement,{childList:true,subtree:true});
+})();
 </script>
+  
 <script>
   // Statement(그리고 페이지 전체)의 .reveal-line을 보이게
   document.addEventListener('DOMContentLoaded', () => {
@@ -1349,117 +1261,6 @@ card.addEventListener('mouseleave', () => {
     }
   });
 })();
-</script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-  let ytPlayer;
-
-  // API 준비되면 호출됨
-  function onYouTubeIframeAPIReady(){
-    ytPlayer = new YT.Player('heroPlayer', {
-      events: { 'onReady': onPlayerReady }
-    });
-  }
-
- function onPlayerReady() {
-  const btn = document.getElementById('muteToggle'); // 없으면 null
-  if (btn) {                       // ✅ 버튼이 있을 때만 이벤트 연결
-    updateBtn(btn);
-    btn.addEventListener('click', () => {
-      if (!ytPlayer) return;
-      if (ytPlayer.isMuted()) {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(80);
-        ytPlayer.playVideo();
-      } else {
-        ytPlayer.mute();
-      }
-      updateBtn(btn);
-    });
-  }
-}
-
-function updateBtn(btn){
-  if (!btn) return;  // ✅ 버튼이 없으면 아무 것도 안 함
-  btn.textContent = (!ytPlayer || ytPlayer.isMuted()) ? '🔇 Sound Off' : '🔊 Sound On';
-}
-  }
-</script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-  let ytPlayer;
-
-  function onYouTubeIframeAPIReady() {
-    ytPlayer = new YT.Player('heroPlayer', {
-      events: {
-        'onReady': onPlayerReady
-      }
-    });
-  }
-
-  function onPlayerReady() {
-    const btn = document.getElementById('muteToggle');
-    updateButton();
-
-    btn.addEventListener('click', () => {
-      if (!ytPlayer) return;
-
-      if (ytPlayer.isMuted()) {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(80);
-        ytPlayer.playVideo(); // 모바일에서도 즉시 재생되도록
-      } else {
-        ytPlayer.mute();
-      }
-
-      updateButton();
-    });
-  }
-
-  function updateButton() {
-    const btn = document.getElementById('muteToggle');
-    if (!ytPlayer || ytPlayer.isMuted()) {
-      btn.textContent = '🔇 Sound Off';
-    } else {
-      btn.textContent = '🔊 Sound On';
-    }
-  }
-</script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-  let player;
-  function onYouTubeIframeAPIReady() {
-    player = new YT.Player('heroPlayer', {
-      events: {
-        'onReady': onPlayerReady
-      }
-    });
-  }
-
-  function onPlayerReady() {
-    const btn = document.createElement('div');
-    btn.id = 'soundToggleBtn';
-    btn.innerHTML = '🔇';
-    btn.style.position = 'absolute';
-    btn.style.top = '20px';
-    btn.style.left = '20px';
-    btn.title = '소리 켜기/끄기';
-    btn.addEventListener('click', toggleSound);
-    document.getElementById('heroPlayerWrap').appendChild(btn);
-  }
-
-  function toggleSound() {
-    if (!player) return;
-    const btn = document.getElementById('soundToggleBtn');
-    const muted = player.isMuted();
-    if (muted) {
-      player.unMute();
-      btn.innerHTML = '🔊';
-    } else {
-      player.mute();
-      btn.innerHTML = '🔇';
-    }
-  }
 </script>
 
 </body>
