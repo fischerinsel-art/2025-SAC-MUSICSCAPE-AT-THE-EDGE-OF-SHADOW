@@ -1208,6 +1208,44 @@ card.addEventListener('mouseleave', () => {
   document.addEventListener('DOMContentLoaded', attachSpeakerUnderNavTicket);
   new MutationObserver(attachSpeakerUnderNavTicket).observe(document.documentElement,{childList:true,subtree:true});
 })();
+   // 선호 화질 우선순위 (상위가 더 고화질)
+const PREFERRED_QUALITIES = ['highres', 'hd2160', 'hd1440', 'hd1080', 'hd720', 'large'];
+
+// 가능한 최고 화질을 골라 적용
+function applyPreferredQuality(player){
+  try {
+    const available = (player.getAvailableQualityLevels && player.getAvailableQualityLevels()) || [];
+    // available 예: ["hd1080","hd720","large","medium","small"]
+    const pick = PREFERRED_QUALITIES.find(q => available.includes(q)) || 'default';
+    if (player.setPlaybackQuality) player.setPlaybackQuality(pick);
+  } catch(_) {}
+}
+
+// onReady 안에서 최초 한 번 실행
+// onStateChange에서 재생(=1) 직후 다시 한 번 실행 (유튜브가 재생 시작 후 품질을 바꾸는 경우가 있어 재요청)
+window.onYouTubeIframeAPIReady = function(){
+  ytReady = true;
+  player = new YT.Player('heroPlayer', {
+    events: {
+      onReady: function(e){
+        e.target.mute(); 
+        e.target.pauseVideo();
+        isPlaying = false;
+        applyPreferredQuality(e.target);          // ✅ 초기 품질 요청
+        attachSpeakerUnderNavTicket();
+      },
+      onStateChange: function(ev){
+        if (ev.data === YT.PlayerState.PLAYING){
+          applyPreferredQuality(ev.target);       // ✅ 재생 직후 다시 품질 요청
+          // 혹시 모를 재조정을 대비해 약한 재시도
+          setTimeout(()=>applyPreferredQuality(ev.target), 800);
+          setTimeout(()=>applyPreferredQuality(ev.target), 2000);
+        }
+      }
+    }
+  });
+};
+
 </script>
   
 <script>
