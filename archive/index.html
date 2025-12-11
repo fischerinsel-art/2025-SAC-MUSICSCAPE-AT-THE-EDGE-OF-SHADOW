@@ -328,7 +328,7 @@ img.protect{
             <img src="./images/shadow_01.webp" class="w-20 h-12 object-cover rounded-md" alt="그림자의 경계에서"/><span class="text-sm font-medium">그림자의 경계에서</span>
           </button>
           <button class="tp-item w-full flex items-center gap-3 p-2 rounded-xl border border-white/10 hover:bg-white/5" data-panel="panel-bluehour">
-            <img src="./images/bluehour_01.webp" class="w-20 h-12 object-cover rounded-md" alt="Blue Hour"/><span class="text-sm font-medium">Blue Hour (Encore)</span>
+            <img src="./images/bluehour_01.webp" class="w-20 h-12 object-cover rounded-md" alt="Blue Hour"/><span class="text-sm font-medium">Blue Hour</span>
           </button>
         </aside>
 
@@ -472,20 +472,30 @@ img.protect{
       <img src="./images/poster.jpg" alt="Poster" class="w-full h-96 object-cover"/>
     </a>
 
-<!-- Promo Video 카드 (포스터와 동일한 카드 스타일) -->
+<!-- Promo Video 카드 (섬네일 클릭 → 큰 화면 모달 재생) -->
 <div class="border border-white/10 rounded-2xl overflow-hidden hover:border-white/30">
-  <div class="media" style="--ratio:16/9;">
-    <iframe
-      src="https://www.youtube.com/embed/0gAJl29lYyI?rel=0&modestbranding=1&playsinline=1"
-      title="Promo Video — FROM HERE TO EVERYWHERE"
-      allowfullscreen
-    ></iframe>
+  <!-- 썸네일 영역 -->
+  <div class="media relative cursor-pointer" style="--ratio:16/9;" onclick="openPromoVideo()">
+    <!-- 홍보영상 섬네일 이미지 경로만 네가 쓰는 걸로 바꾸면 돼 -->
+    <img src="./images/promo_thumb.webp" 
+         alt="Promo Video Thumbnail"
+         class="w-full h-full object-cover" />
+
+    <!-- 재생 아이콘 오버레이 -->
+    <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+      <div class="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center">
+        <span class="ml-1 text-2xl text-black">▶</span>
+      </div>
+    </div>
   </div>
+
+  <!-- 카드 텍스트 영역 -->
   <div class="p-4">
     <h4 class="text-lg font-semibold">Promo Video</h4>
     <p class="mt-2 text-zinc-300 text-sm">공식 홍보영상</p>
   </div>
 </div>
+
 
   </div>
 </div>
@@ -816,7 +826,7 @@ document.querySelectorAll('a[data-lightbox]').forEach(a=>{
       section.innerHTML = `
         <h3 class="text-lg font-medium text-zinc-200">${tr.title}</h3>
         <div class="gl-row">
-          ${[1,2,3,4,5,6,7].map(n=>{
+          ${[1,2,3,4,5,6,7,8,9,10].map(n=>{
             const num = String(n).padStart(2,'0');
             const full = `./images/${tr.id}_${num}.${IMG_EXT}`;
             return `<img class="thumb" src="${full}" alt="${tr.title} ${num}" data-full="${full}" />`;
