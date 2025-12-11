@@ -476,14 +476,13 @@ img.protect{
 <div class="border border-white/10 rounded-2xl overflow-hidden hover:border-white/30">
   <!-- 썸네일 영역 -->
   <div class="media relative cursor-pointer" style="--ratio:16/9;" onclick="openPromoVideo()">
-    <!-- 홍보영상 섬네일 이미지 경로만 네가 쓰는 걸로 바꾸면 돼 -->
-    <img src="./images/promo_thumb.webp" 
+    <img src="./images/promo_thumb.webp"
          alt="Promo Video Thumbnail"
          class="w-full h-full object-cover" />
 
     <!-- 재생 아이콘 오버레이 -->
     <div class="absolute inset-0 flex items-center justify-center bg-black/30">
-      <div class="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center">
+      <div class="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
         <span class="ml-1 text-2xl text-black">▶</span>
       </div>
     </div>
@@ -711,6 +710,27 @@ img.protect{
   </section>
 
 </main>
+  <!-- Promo Video 모달 -->
+<div id="promoModal"
+     class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+  <div class="w-full max-w-4xl mx-4">
+    <div class="relative pb-[56.25%] bg-black rounded-2xl overflow-hidden shadow-xl">
+      <iframe id="promoFrame"
+              class="absolute inset-0 w-full h-full"
+              src=""
+              title="Promo Video — FROM HERE TO EVERYWHERE"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+    </div>
+
+    <button type="button"
+            class="mt-4 mx-auto block px-4 py-2 rounded-full bg-white/90 text-black text-sm font-medium hover:bg-white"
+            onclick="closePromoVideo()">
+      ✕ 닫기
+    </button>
+  </div>
+</div>
+
 </body>
   <footer class="py-10 border-t border-white/10 text-center text-zinc-400">
     © FISCHERINSEL ARTS · MUSICSCAPE — 그림자의 경계에서
@@ -940,6 +960,51 @@ document.addEventListener("DOMContentLoaded", () => {
     window._rT = setTimeout(renderMobileDescriptions, 150);
   });
 });
+</script>
+<script>
+  // 홍보영상 YouTube ID (주소: https://youtu.be/0gAJl29lYyI)
+  const PROMO_YT_ID = '0gAJl29lYyI';
+
+  // 썸네일 클릭 → 모달 열기 + 자동재생
+  function openPromoVideo() {
+    const modal = document.getElementById('promoModal');
+    const frame = document.getElementById('promoFrame');
+    if (!modal || !frame) return;
+
+    const embedUrl =
+      `https://www.youtube.com/embed/${PROMO_YT_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+
+    frame.src = embedUrl;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  // 모달 닫기 + 재생 중지
+  function closePromoVideo() {
+    const modal = document.getElementById('promoModal');
+    const frame = document.getElementById('promoFrame');
+    if (!modal || !frame) return;
+
+    frame.src = ''; // src 비워서 재생 완전히 멈추기
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  // 검은 배경 클릭해도 닫히게
+  document.addEventListener('click', (event) => {
+    const modal = document.getElementById('promoModal');
+    if (!modal) return;
+    if (event.target === modal) {
+      closePromoVideo();
+    }
+  });
+
+  // ESC 키로 닫기
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closePromoVideo();
+    }
+  });
 </script>
 
 
