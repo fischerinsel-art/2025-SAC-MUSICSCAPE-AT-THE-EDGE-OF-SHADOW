@@ -59,16 +59,16 @@
 }
 /* 9장 지연 시간: 0s, 4s, 8s ... 32s */
 .hero-slides img:nth-child(1){animation-delay:0s}
-.hero-slides img:nth-child(2){animation-delay:4s}
-.hero-slides img:nth-child(3){animation-delay:8s}
-.hero-slides img:nth-child(4){animation-delay:12s}
-.hero-slides img:nth-child(5){animation-delay:16s}
-.hero-slides img:nth-child(6){animation-delay:20s}
-.hero-slides img:nth-child(7){animation-delay:24s}
-.hero-slides img:nth-child(8){animation-delay:28s}
-.hero-slides img:nth-child(9){animation-delay:32s}
-.hero-slides img:nth-child(10){animation-delay:36s}
-.hero-slides img:nth-child(11){animation-delay:40s}
+.hero-slides img:nth-child(2){animation-delay:3s}
+.hero-slides img:nth-child(3){animation-delay:6s}
+.hero-slides img:nth-child(4){animation-delay:9s}
+.hero-slides img:nth-child(5){animation-delay:12s}
+.hero-slides img:nth-child(6){animation-delay:15s}
+.hero-slides img:nth-child(7){animation-delay:18s}
+.hero-slides img:nth-child(8){animation-delay:21s}
+.hero-slides img:nth-child(9){animation-delay:24s}
+.hero-slides img:nth-child(10){animation-delay:27s}
+.hero-slides img:nth-child(11){animation-delay:30s}
 
 
 
@@ -472,19 +472,21 @@ img.protect{
       <img src="./images/poster.jpg" alt="Poster" class="w-full h-96 object-cover"/>
     </a>
 
-    <!-- Promo Video 카드 (포스터와 동일한 카드 스타일) -->
-    <div class="border border-white/10 rounded-2xl overflow-hidden hover:border-white/30">
-      <div class="media" style="--ratio:16/9;">
-        <iframe
-          src="https://www.youtube.com/embed/0gAJl29lYyI?rel=0&modestbranding=1"
-          title="Promo Video — FROM HERE TO EVERYWHERE"
-          allowfullscreen></iframe>
-      </div>
-      <div class="p-4">
-        <h4 class="text-lg font-semibold">Promo Video</h4>
-        <p class="mt-2 text-zinc-300 text-sm">공식 홍보영상</p>
-      </div>
-    </div>
+<!-- Promo Video 카드 (포스터와 동일한 카드 스타일) -->
+<div class="border border-white/10 rounded-2xl overflow-hidden hover:border-white/30">
+  <div class="media" style="--ratio:16/9;">
+    <iframe
+      src="https://www.youtube.com/embed/0gAJl29lYyI?rel=0&modestbranding=1&playsinline=1"
+      title="Promo Video — FROM HERE TO EVERYWHERE"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <div class="p-4">
+    <h4 class="text-lg font-semibold">Promo Video</h4>
+    <p class="mt-2 text-zinc-300 text-sm">공식 홍보영상</p>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -663,9 +665,38 @@ img.protect{
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-2xl sm:text-3xl font-semibold">Press & Media</h2>
       <ul id="pressList" class="mt-6 space-y-2">
-        <li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
-          예술의전당 공연 관련 보도 자료는 추후 업데이트될 예정입니다.
-        </li>
+       <li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
+  “최인, ‘Musicscape-그림자의 경계에서’ 29~30일 예술의전당 공연” — 머니투데이, 2025.11.14 :contentReference[oaicite:0]{index=0}
+<li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
+  <a href="https://v.daum.net/v/20251114171447706" target="_blank" class="hover:underline">
+    “최인, ‘Musicscape-그림자의 경계에서’ 29~30일 예술의전당 공연” — 머니투데이, 2025.11.14
+  </a>
+</li>
+
+<li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
+  <a href="https://www.knewstv.kr/news/articleView.html?idxno=7641" target="_blank" class="hover:underline">
+    “기타리스트 최인 신작 공연 ‘Musicscape-그림자의 경계에서’ 내년 예술의전당서 개최” — Knewstv, 2025.11.13
+  </a>
+</li>
+
+<li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
+  <a href="https://www.newswire.co.kr/newsRead.php?no=1022976" target="_blank" class="hover:underline">
+    “어둠을 넘어 빛으로 향하는 음악의 여정 ‘MUSICSCAPE - 그림자의 경계에서’” — 뉴스와이어, 2025.11.13
+  </a>
+</li>
+
+<li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
+  <a href="https://www.artinsight.co.kr/news/view.php?no=78687" target="_blank" class="hover:underline">
+    “불확실한 시대 속 빛으로 나아가는 음악” — ArtInsight, 2025.11
+  </a>
+</li>
+
+<li class="border border-white/10 rounded-lg px-3 py-2 text-sm text-zinc-300">
+  <a href="https://www.artinsight.co.kr/news/view.php?no=78757" target="_blank" class="hover:underline">
+    “음향과 영상이 음악적 몰입을 극대화하는 무대” — ArtInsight, 2025.11
+  </a>
+</li>
+
       </ul>
     </div>
   </section>
@@ -785,7 +816,7 @@ document.querySelectorAll('a[data-lightbox]').forEach(a=>{
       section.innerHTML = `
         <h3 class="text-lg font-medium text-zinc-200">${tr.title}</h3>
         <div class="gl-row">
-          ${[1,2,3,4,5].map(n=>{
+          ${[1,2,3,4,5,6,7].map(n=>{
             const num = String(n).padStart(2,'0');
             const full = `./images/${tr.id}_${num}.${IMG_EXT}`;
             return `<img class="thumb" src="${full}" alt="${tr.title} ${num}" data-full="${full}" />`;
@@ -834,7 +865,7 @@ document.querySelectorAll('a[data-lightbox]').forEach(a=>{
     {id:"space", title:"공간 1,2,3"},
     {id:"whoamai", title:"Who am A.I."},
     {id:"shadow", title:"그림자의 경계에서"},
-    {id:"bluehour", title:"Blue Hour (Encore)"}
+    {id:"bluehour", title:"Blue Hour"}
   ];
 
   // 각 패널의 본문 HTML을 읽어 카드로 구성
